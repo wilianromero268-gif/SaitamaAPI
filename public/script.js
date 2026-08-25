@@ -3,89 +3,48 @@
 // ======================================================
 
 const API_CONFIG = {
-
     ytmp3: {
-        name: 'YouTube MP3',
-        icon: '🎵',
-        endpoint: '/saitama/api/ytmp3',
-        parameter: 'url',
-        placeholder: 'https://youtube.com/watch?v=...'
+        endpoint: "/saitama/api/ytmp3",
+        parameter: "url",
+        placeholder: "https://youtube.com/watch?v=..."
     },
 
     ytmp4: {
-        name: 'YouTube MP4',
-        icon: '🎬',
-        endpoint: '/saitama/api/ytmp4',
-        parameter: 'url',
-        placeholder: 'https://youtube.com/watch?v=...'
+        endpoint: "/saitama/api/ytmp4",
+        parameter: "url",
+        placeholder: "https://youtube.com/watch?v=..."
     },
 
     play: {
-        name: 'Play MP3',
-        icon: '🎧',
-        endpoint: '/saitama/api/play',
-        parameter: 'q',
-        placeholder: 'Nombre de la canción'
+        endpoint: "/saitama/api/play",
+        parameter: "q",
+        placeholder: "Nombre de la canción"
     },
 
     play2: {
-        name: 'Play Video',
-        icon: '▶️',
-        endpoint: '/saitama/api/play2',
-        parameter: 'q',
-        placeholder: 'Nombre del video'
+        endpoint: "/saitama/api/play2",
+        parameter: "q",
+        placeholder: "Nombre del video"
     },
 
     ytsearch: {
-        name: 'YouTube Search',
-        icon: '🔎',
-        endpoint: '/saitama/api/ytsearch',
-        parameter: 'q',
-        placeholder: 'Buscar en YouTube'
+        endpoint: "/saitama/api/ytsearch",
+        parameter: "q",
+        placeholder: "Buscar en YouTube"
     },
 
     tiktokdl: {
-        name: 'TikTok Downloader',
-        icon: '🎵',
-        endpoint: '/saitama/api/tiktokdl',
-        parameter: 'url',
-        placeholder: 'https://www.tiktok.com/@usuario/video/...'
+        endpoint: "/saitama/api/tiktokdl",
+        parameter: "url",
+        placeholder: "https://www.tiktok.com/@usuario/video/..."
     },
 
     tiktoksearch: {
-        name: 'TikTok Search',
-        icon: '🔍',
-        endpoint: '/saitama/api/tiktoksearch',
-        parameter: 'q',
-        placeholder: 'Buscar en TikTok'
-    },
-
-    facebookdl: {
-        name: 'Facebook Downloader',
-        icon: '📘',
-        endpoint: '/saitama/api/facebookdl',
-        parameter: 'url',
-        placeholder: 'https://www.facebook.com/...'
-    },
-
-    instagramdl: {
-        name: 'Instagram Downloader',
-        icon: '📸',
-        endpoint: '/saitama/api/instagramdl',
-        parameter: 'url',
-        placeholder: 'https://www.instagram.com/...'
-    },
-
-    spotifysearch: {
-        name: 'Spotify Search',
-        icon: '🎶',
-        endpoint: '/saitama/api/spotifysearch',
-        parameter: 'q',
-        placeholder: 'Nombre de la canción'
+        endpoint: "/saitama/api/tiktoksearch",
+        parameter: "q",
+        placeholder: "Buscar en TikTok"
     }
-
 };
-
 
 // ======================================================
 // ELEMENTOS
