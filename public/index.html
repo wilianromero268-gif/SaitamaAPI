@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#061b3d">
+<title>Saitama API</title>
+
+<style>
+:root{
+ --b:#168cff;--b2:#0062ff;--bg:#020817;
+ --bd:rgba(71,163,255,.18);--txt:#f5f9ff;
+ --mut:#8fa6c4;--ok:#20e58a;--r:18px
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+ font-family:Inter,system-ui,sans-serif;color:var(--txt);
+ min-height:100vh;background:
+ radial-gradient(circle at 10% 5%,#0077ff4d,transparent 30%),
+ radial-gradient(circle at 90% 15%,#00d9ff26,transparent 28%),
+ linear-gradient(135deg,#010611,#031634 50%,#020817);
+ overflow-x:hidden
+}
+body:before{
+ content:"";position:fixed;inset:0;z-index:-1;opacity:.4;
+ background-image:linear-gradient(#fff3 1px,transparent 1px),
+ linear-gradient(90deg,#fff3 1px,transparent 1px);
+ background-size:42px 42px
+}
+.container{width:min(1100px,92%);margin:auto}
+
+nav{
+ position:sticky;top:0;z-index:10;background:#010816d9;
+ backdrop-filter:blur(18px);border-bottom:1px solid #ffffff0d
+}
+.nav{
+ min-height:65px;display:flex;align-items:center;
+ justify-content:space-between;gap:12px
+}
+.brand{display:flex;align-items:center;gap:9px;font-weight:900}
+.brand img{width:38px;height:38px;border-radius:11px;object-fit:cover}
+.brand span{
+ background:linear-gradient(90deg,#fff,#8dd5ff,#19baff);
+ -webkit-background-clip:text;color:transparent
+}
+.nav a{color:#9db2cd;text-decoration:none;font-size:12px;margin:0 5px}
+.online{
+ color:#8df4c1;font-size:10px;font-weight:800;padding:7px 10px;
+ border:1px solid #20e58a26;border-radius:99px;background:#20e58a12
+}
+.dot{
+ display:inline-block;width:6px;height:6px;background:var(--ok);
+ border-radius:50%;margin-right:5px
+}
+
+.hero{padding:55px 0 35px}
+.hero-grid{
+ display:grid;grid-template-columns:1.1fr .9fr;
+ gap:35px;align-items:center
+}
+.badge{
+ display:inline-block;padding:6px 10px;border-radius:99px;
+ color:#8dccff;background:#0080ff17;border:1px solid #0097ff3b;
+ font-size:10px;font-weight:900;margin-bottom:15px
+}
+h1{
+ font-size:clamp(45px,7vw,75px);line-height:.9;
+ letter-spacing:-4px;margin-bottom:15px;
+ background:linear-gradient(90deg,#fff,#9bdcff,#19bfff);
+ -webkit-background-clip:text;color:transparent
+}
+.hero h2{font-size:21px;margin-bottom:10px}
+.hero p{color:var(--mut);font-size:13px;line-height:1.6;max-width:580px}
+.buttons{display:flex;gap:8px;margin-top:20px}
+.btn{
+ padding:10px 15px;border-radius:10px;text-decoration:none;
+ font-size:12px;font-weight:800
+}
+.primary{background:linear-gradient(135deg,var(--b),var(--b2));color:#fff}
+.secondary{background:#ffffff0d;color:#d7eaff;border:1px solid #ffffff14}
+
+.hero-card,.key-card,.api-card,.docs,.stat{
+ background:linear-gradient(145deg,#082042dc,#030f20c2);
+ border:1px solid var(--bd)
+}
+.hero-card{padding:15px;border-radius:23px}
+.hero-card img{
+ display:block;width:100%;max-width:320px;height:320px;
+ object-fit:cover;margin:auto;border-radius:19px
+}
+
+.key-card{margin-top:15px;padding:15px;border-radius:16px}
+.key-head{display:flex;justify-content:space-between;margin-bottom:9px}
+.key-title{font-size:14px;font-weight:900}
+.active{color:var(--ok);font-size:10px;font-weight:800}
+.key-row{display:flex;gap:7px}
+.key{
+ flex:1;min-width:0;background:#00000040;color:#9fd7ff;
+ border:1px solid #ffffff12;border-radius:9px;padding:10px;
+ font:11px monospace;outline:none
+}
+.copy{
+ border:0;border-radius:9px;padding:0 13px;background:var(--b);
+ color:#fff;font-weight:800;cursor:pointer
+}
+.msg{display:block;color:var(--ok);font-size:10px;margin-top:6px;min-height:12px}
+
+.music{
+ margin-top:15px;padding:12px;border-radius:15px;
+ background:#00000038;border:1px solid #0091ff25
+}
+.music-title{
+ font-size:11px;font-weight:900;color:#9fd7ff;margin-bottom:8px
+}
+.music iframe{
+ width:100%;height:90px;border:0;border-radius:10px
+}
+
+.stats{
+ display:grid;grid-template-columns:repeat(4,1fr);
+ gap:10px;margin:10px 0 50px
+}
+.stat{padding:15px;border-radius:14px}
+.label{font-size:9px;color:#7892b1;font-weight:800;text-transform:uppercase}
+.value{font-size:21px;font-weight:900;margin-top:5px}
+.green{color:var(--ok)}
+
+.title{margin-bottom:18px}
+.title h2{font-size:28px}
+.title p{color:var(--mut);font-size:12px;margin-top:4px}
+.api-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
+.api-card{padding:18px;border-radius:var(--r)}
+.head{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.icon{
+ width:40px;height:40px;display:grid;place-items:center;
+ border-radius:11px;background:#008aff1f;border:1px solid #009cff2e
+}
+.name{font-weight:900;font-size:16px}
+.available{color:var(--ok);font-size:9px;font-weight:800}
+.api-card p{color:var(--mut);font-size:11px;line-height:1.5;margin-bottom:10px}
+
+.endpoint{
+ display:flex;align-items:center;gap:5px;background:#00000040;
+ border:1px solid #ffffff0d;border-radius:8px;padding:8px
+}
+.endpoint code{
+ flex:1;color:#83c9ff;font-size:9px;word-break:break-all
+}
+.endpoint button{
+ border:0;border-radius:6px;padding:5px 7px;
+ background:#0080ff26;color:#a9dcff;cursor:pointer
+}
+.param{color:#7892b1;font-size:10px;margin:9px 0}
+.test{display:flex;gap:6px}
+.input{
+ flex:1;min-width:0;padding:9px;border-radius:8px;
+ border:1px solid #ffffff12;background:#00000040;
+ color:#fff;outline:0;font-size:10px
+}
+.test button{
+ border:0;border-radius:8px;padding:0 12px;background:var(--b);
+ color:#fff;font-weight:800;cursor:pointer;font-size:10px
+}
+.result{
+ display:none;margin-top:8px;padding:10px;border-radius:8px;
+ background:#010914;border:1px solid #0091ff2e
+}
+.result.show{display:block}
+.result pre{
+ max-height:200px;overflow:auto;white-space:pre-wrap;
+ word-break:break-word;color:#9fd7ff;font-size:9px
+}
+
+.docs{margin-top:40px;padding:20px;border-radius:17px}
+.docs h3{margin-bottom:7px}
+.docs p{color:var(--mut);font-size:12px;line-height:1.6}
+.docs code{color:#82caff}
+
+footer{
+ text-align:center;color:#7187a4;font-size:10px;
+ padding:30px 0;margin-top:50px
+}
+
+@media(max-width:800px){
+ .hero-grid{grid-template-columns:1fr}
+ .hero-card{max-width:380px;margin:auto}
+ .stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+ .nav-links{display:none}
+ .api-grid{grid-template-columns:1fr}
+ .test,.key-row{flex-direction:column}
+ .test button,.copy{padding:10px}
+ .buttons{flex-direction:column}
+ .btn{text-align:center}
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<div class="container nav">
+
+<div class="brand">
+<img src="https://files.catbox.moe/azw485.jpg" alt="Saitama">
+<span>Saitama API</span>
+</div>
+
+<div class="nav-links">
+<a href="#apis">APIs</a>
+<a href="#docs">Docs</a>
+</div>
+
+<div class="online">
+<span class="dot"></span>ONLINE
+</div>
+
+</div>
+</nav>
+
+<main>
+
+<section class="hero">
+<div class="container hero-grid">
+
+<div>
+
+<span class="badge">⚡ API REST • GRATIS</span>
+
+<h1>SAITAMA</h1>
+
+<h2>APIs rápidas para tus proyectos.</h2>
+
+<p>
+APIs simples y modernas para YouTube, TikTok y búsquedas.
+Prueba cada endpoint directamente desde este dashboard.
+</p>
+
+<div class="buttons">
+<a href="#apis" class="btn primary">Explorar APIs</a>
+<a href="#docs" class="btn secondary">Documentación</a>
+</div>
+
+<div class="key-card">
+
+<div class="key-head">
+<span class="key-title">🔑 API KEY</span>
+<span class="active">● ACTIVA</span>
+</div>
+
+<div class="key-row">
+<input id="apiKey" class="key"
+value="Saitama_saidev146" readonly>
+<button class="copy" onclick="copyKey()">📋 Copiar</button>
+</div>
+
+<span id="msg" class="msg"></span>
+
+</div>
+
+<!-- MÚSICA ALEATORIA -->
+
+<div class="music">
+
+<div class="music-title">
+🎵 Saitama Music
+</div>
+
+<iframe
+id="musicPlayer"
+allow="autoplay; encrypted-media"
+allowfullscreen>
+</iframe>
+
+</div>
+
+</div>
+
+<div class="hero-card">
+<img
+src="https://files.catbox.moe/azw485.jpg"
+alt="Saitama API">
+</div>
+
+</div>
+</section>
+
+<section class="container">
+
+<div class="stats">
+
+<div class="stat">
+<div class="label">APIs</div>
+<div class="value" id="count">0</div>
+</div>
+
+<div class="stat">
+<div class="label">Estado</div>
+<div class="value green">Online</div>
+</div>
+
+<div class="stat">
+<div class="label">Acceso</div>
+<div class="value">Free</div>
+</div>
+
+<div class="stat">
+<div class="label">Versión</div>
+<div class="value">1.0</div>
+</div>
+
+</div>
+
+</section>
+
+<section id="apis">
+
+<div class="container">
+
+<div class="title">
+<h2>APIs disponibles</h2>
+<p>Selecciona una API y prueba su endpoint.</p>
+</div>
+
+<div class="api-grid" id="apiGrid"></div>
+
+<div class="docs" id="docs">
+
+<h3>Documentación rápida</h3>
+
+<p>
+Todas las APIs utilizan <code>GET</code>.
+La API KEY se agrega automáticamente a cada solicitud.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+<footer>
+Saitama API • Creado por SaiDev145
+</footer>
+
+<script>
+
+const API_KEY="Saitama_saidev146";
+
+/*
+ IMPORTANTE:
+ Usa el dominio donde realmente está publicada
+ la API. window.location.origin evita colocar
+ manualmente un dominio viejo de Vercel.
+*/
+const API_BASE=window.location.origin;
+
+
+/* =========================
+   MÚSICA ALEATORIA
+========================= */
+
+const songs=[
+ "0GnA8VYOfko",
+ "_j0zh4vmvaQ",
+ "5OUvWRoFBKo",
+ "kZqksCiCEZc"
+];
+
+const randomSong=
+ songs[Math.floor(Math.random()*songs.length)];
+
+document.getElementById("musicPlayer").src=
+ `https://www.youtube.com/embed/${randomSong}?autoplay=1&mute=0&controls=1&rel=0`;
+
+
+/* =========================
+   APIs
+========================= */
+
+const API_CONFIG={
+
+ytmp3:{
+icon:"🎵",
+name:"YouTube MP3",
+description:"Descarga audio MP3 desde YouTube.",
+endpoint:"/saitama/api/ytmp3",
+parameter:"url",
+placeholder:"https://youtube.com/watch?v=..."
+},
+
+ytmp4:{
+icon:"🎬",
+name:"YouTube MP4",
+description:"Descarga videos MP4 desde YouTube.",
+endpoint:"/saitama/api/ytmp4",
+parameter:"url",
+placeholder:"https://youtube.com/watch?v=..."
+},
+
+play:{
+icon:"🎧",
+name:"Play MP3",
+description:"Busca una canción y obtiene el audio.",
+endpoint:"/saitama/api/play",
+parameter:"q",
+placeholder:"Nombre de la canción"
+},
+
+play2:{
+icon:"📺",
+name:"Play Video",
+description:"Busca un video y obtiene el resultado.",
+endpoint:"/saitama/api/play2",
+parameter:"q",
+placeholder:"Nombre del video"
+},
+
+ytsearch:{
+icon:"🔎",
+name:"YouTube Search",
+description:"Busca videos en YouTube.",
+endpoint:"/saitama/api/ytsearch",
+parameter:"q",
+placeholder:"Buscar en YouTube"
+},
+
+tiktokdl:{
+icon:"🎵",
+name:"TikTok Downloader",
+description:"Descarga contenido desde TikTok.",
+endpoint:"/saitama/api/tiktokdl",
+parameter:"url",
+placeholder:"URL de TikTok"
+},
+
+tiktoksearch:{
+icon:"🔎",
+name:"TikTok Search",
+description:"Busca contenido en TikTok.",
+endpoint:"/saitama/api/tiktoksearch",
+parameter:"q",
+placeholder:"Buscar en TikTok"
+}
+
+};
+
+
+const grid=document.getElementById("apiGrid");
+
+document.getElementById("count").textContent=
+Object.keys(API_CONFIG).length;
+
+
+/* =========================
+   CREAR TARJETAS
+========================= */
+
+function createCard(key,api){
+
+const card=document.createElement("div");
+
+card.className="api-card";
+
+card.innerHTML=`
+
+<div class="head">
+
+<div class="icon">
+${api.icon}
+</div>
+
+<div>
+<div class="name">
+${api.name}
+</div>
+
+<div class="available">
+● Disponible
+</div>
+
+</div>
+
+</div>
+
+<p>
+${api.description}
+</p>
+
+<div class="endpoint">
+
+<code id="endpoint-${key}">
+GET ${API_BASE}${api.endpoint}?${api.parameter}=...&apikey=${API_KEY}
+</code>
+
+<button onclick="copyEndpoint('${key}')">
+📋
+</button>
+
+</div>
+
+<div class="param">
+Parámetro:
+<strong>${api.parameter}</strong>
+</div>
+
+<div class="test">
+
+<input
+id="in-${key}"
+class="input"
+placeholder="${api.placeholder}"
+>
+
+<button onclick="testApi('${key}')">
+Probar
+</button>
+
+</div>
+
+<div
+id="res-${key}"
+class="result">
+
+<pre></pre>
+
+</div>
+
+`;
+
+grid.appendChild(card);
+
+}
+
+Object.entries(API_CONFIG)
+.forEach(([k,v])=>createCard(k,v));
+
+
+/* =========================
+   COPIAR KEY
+========================= */
+
+async function copyKey(){
+
+try{
+
+await navigator.clipboard.writeText(API_KEY);
+
+}catch{
+
+const input=document.getElementById("apiKey");
+
+input.select();
+
+document.execCommand("copy");
+
+}
+
+document.getElementById("msg").textContent=
+"✓ API KEY copiada";
+
+setTimeout(()=>{
+document.getElementById("msg").textContent="";
+},2000);
+
+}
+
+
+/* =========================
+   COPIAR ENDPOINT
+========================= */
+
+async function copyEndpoint(key){
+
+const api=API_CONFIG[key];
+
+const text=
+`GET ${API_BASE}${api.endpoint}?${api.parameter}=...&apikey=${API_KEY}`;
+
+try{
+
+await navigator.clipboard.writeText(text);
+
+}catch{}
+
+}
+
+
+/* =========================
+   PROBAR API
+========================= */
+
+async function testApi(key){
+
+const api=API_CONFIG[key];
+
+const value=
+document.getElementById(`in-${key}`)
+.value.trim();
+
+const box=
+document.getElementById(`res-${key}`);
+
+const pre=box.querySelector("pre");
+
+box.classList.add("show");
+
+if(!value){
+
+pre.textContent="Introduce un valor.";
+
+return;
+
+}
+
+pre.textContent="⏳ Consultando...";
+
+try{
+
+const url=
+`${API_BASE}${api.endpoint}?`+
+`${api.parameter}=${encodeURIComponent(value)}`+
+`&apikey=${encodeURIComponent(API_KEY)}`;
+
+const response=await fetch(url);
+
+const text=await response.text();
+
+let data;
+
+try{
+
+data=JSON.parse(text);
+
+}catch{
+
+data={
+status:false,
+response:text
+};
+
+}
+
+pre.textContent=
+JSON.stringify(data,null,2);
+
+}catch(error){
+
+pre.textContent=
+JSON.stringify({
+
+status:false,
+error:error.message
+
+},null,2);
+
+}
+
+}
+
+</script>
+
+</body>
+  </html>
