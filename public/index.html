@@ -2,712 +2,1043 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="description"
-        content="Saitama API — APIs rápidas, gratuitas y fáciles de usar."
-    >
-
-    <meta
-        name="theme-color"
-        content="#080808"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Saitama API</title>
 
-    <link rel="stylesheet" href="/style.css">
+    <meta
+        name="description"
+        content="Saitama API - APIs rápidas, simples y gratuitas."
+    >
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --blue: #1683ff;
+            --blue2: #005eff;
+            --cyan: #00c8ff;
+            --dark: #020817;
+            --dark2: #06152d;
+            --card: rgba(8, 25, 50, .72);
+            --border: rgba(75, 160, 255, .20);
+            --text: #f5f9ff;
+            --muted: #91a4c0;
+            --green: #20e58a;
+        }
+
+        body {
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            color: var(--text);
+
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at 15% 10%,
+                    rgba(0, 132, 255, .28),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    circle at 85% 20%,
+                    rgba(0, 217, 255, .16),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #010714,
+                    #031a3b 48%,
+                    #020817
+                );
+
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.025) 1px,
+                    transparent 1px
+                );
+
+            background-size: 45px 45px;
+
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: auto;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+
+            backdrop-filter: blur(18px);
+
+            background:
+                rgba(2, 8, 23, .72);
+
+            border-bottom:
+                1px solid rgba(255,255,255,.06);
+        }
+
+        .nav-content {
+            min-height: 72px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -.5px;
+        }
+
+        .brand img {
+            width: 42px;
+            height: 42px;
+
+            object-fit: cover;
+
+            border-radius: 12px;
+
+            border:
+                1px solid rgba(255,255,255,.18);
+
+            box-shadow:
+                0 0 25px rgba(0,140,255,.35);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-links a {
+            color: #b9c8dc;
+            text-decoration: none;
+
+            padding: 9px 14px;
+
+            border-radius: 10px;
+
+            transition: .2s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            background: rgba(255,255,255,.07);
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            min-height: 570px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 75px 0 55px;
+
+            position: relative;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+
+            gap: 60px;
+
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 13px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(20, 120, 255, .10);
+
+            border:
+                1px solid rgba(45, 150, 255, .25);
+
+            color: #8cc8ff;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            margin-bottom: 22px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: var(--green);
+
+            box-shadow:
+                0 0 14px var(--green);
+        }
+
+        h1 {
+            font-size: clamp(48px, 8vw, 88px);
+
+            line-height: .95;
+
+            letter-spacing: -4px;
+
+            margin-bottom: 25px;
+
+            background:
+                linear-gradient(
+                    100deg,
+                    #ffffff,
+                    #8ccfff 45%,
+                    #22bfff
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero h2 {
+            font-size: clamp(20px, 3vw, 30px);
+
+            margin-bottom: 18px;
+
+            color: #d9e9ff;
+        }
+
+        .hero p {
+            color: var(--muted);
+
+            font-size: 17px;
+            line-height: 1.7;
+
+            max-width: 620px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+
+            gap: 12px;
+
+            margin-top: 30px;
+        }
+
+        button,
+        .button {
+            border: 0;
+
+            cursor: pointer;
+
+            text-decoration: none;
+
+            font-weight: 800;
+
+            padding: 13px 20px;
+
+            border-radius: 13px;
+
+            transition:
+                transform .2s,
+                box-shadow .2s,
+                background .2s;
+        }
+
+        .primary {
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--blue2)
+                );
+
+            box-shadow:
+                0 10px 35px rgba(0,110,255,.30);
+        }
+
+        .primary:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 15px 45px rgba(0,110,255,.45);
+        }
+
+        .secondary {
+            color: #d8e9ff;
+
+            background:
+                rgba(255,255,255,.055);
+
+            border:
+                1px solid rgba(255,255,255,.10);
+        }
+
+        .secondary:hover {
+            background:
+                rgba(255,255,255,.10);
+        }
+
+        /* =========================
+           HERO IMAGE
+        ========================= */
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-image::before {
+            content: "";
+
+            position: absolute;
+
+            width: 270px;
+            height: 270px;
+
+            left: 50%;
+            top: 50%;
+
+            transform: translate(-50%, -50%);
+
+            background:
+                rgba(0, 130, 255, .28);
+
+            filter: blur(80px);
+
+            z-index: -1;
+        }
+
+        .hero-image img {
+            width: 100%;
+
+            max-width: 450px;
+
+            display: block;
+
+            margin: auto;
+
+            border-radius: 30px;
+
+            border:
+                1px solid rgba(255,255,255,.16);
+
+            box-shadow:
+                0 30px 90px rgba(0,0,0,.55),
+                0 0 55px rgba(0,130,255,.20);
+        }
+
+        /* =========================
+           STATS
+        ========================= */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 14px;
+
+            margin-bottom: 70px;
+        }
+
+        .stat {
+            padding: 22px;
+
+            border-radius: 18px;
+
+            background:
+                rgba(7, 23, 47, .65);
+
+            border:
+                1px solid var(--border);
+
+            backdrop-filter: blur(15px);
+        }
+
+        .stat-label {
+            color: #7890ad;
+
+            font-size: 12px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 9px;
+        }
+
+        .stat-value {
+            font-size: 26px;
+
+            font-weight: 850;
+        }
+
+        .online {
+            color: var(--green);
+        }
+
+        /* =========================
+           SECTION
+        ========================= */
+
+        section {
+            padding: 35px 0 80px;
+        }
+
+        .section-title {
+            margin-bottom: 28px;
+        }
+
+        .section-title h2 {
+            font-size: 34px;
+
+            margin-bottom: 8px;
+        }
+
+        .section-title p {
+            color: var(--muted);
+        }
+
+        /* =========================
+           API CARDS
+        ========================= */
+
+        .api-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 16px;
+        }
+
+        .api-card {
+            padding: 24px;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(9,31,62,.82),
+                    rgba(4,15,32,.72)
+                );
+
+            border:
+                1px solid var(--border);
+
+            transition:
+                transform .2s,
+                border .2s,
+                box-shadow .2s;
+        }
+
+        .api-card:hover {
+            transform: translateY(-4px);
+
+            border-color:
+                rgba(40,155,255,.42);
+
+            box-shadow:
+                0 20px 50px rgba(0,0,0,.25);
+        }
+
+        .api-top {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 16px;
+        }
+
+        .method {
+            font-size: 11px;
+
+            font-weight: 900;
+
+            color: #67b8ff;
+
+            background:
+                rgba(0,130,255,.10);
+
+            padding: 6px 9px;
+
+            border-radius: 7px;
+        }
+
+        .api-status {
+            font-size: 11px;
+
+            color: var(--green);
+        }
+
+        .api-card h3 {
+            font-size: 20px;
+
+            margin-bottom: 9px;
+        }
+
+        .api-card p {
+            color: var(--muted);
+
+            line-height: 1.55;
+
+            font-size: 14px;
+
+            min-height: 44px;
+        }
+
+        .endpoint {
+            margin-top: 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            padding: 11px 13px;
+
+            border-radius: 11px;
+
+            background:
+                rgba(0,0,0,.25);
+
+            border:
+                1px solid rgba(255,255,255,.06);
+        }
+
+        .endpoint code {
+            color: #8dcaff;
+
+            font-size: 12px;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+        }
+
+        .test-btn {
+            padding: 8px 11px;
+
+            color: white;
+
+            background:
+                rgba(0,125,255,.16);
+
+            border:
+                1px solid rgba(0,140,255,.25);
+
+            font-size: 12px;
+        }
+
+        /* =========================
+           API KEY
+        ========================= */
+
+        .key-box {
+            margin-top: 45px;
+
+            padding: 24px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(0,95,210,.18),
+                    rgba(0,20,50,.60)
+                );
+
+            border:
+                1px solid rgba(0,140,255,.25);
+        }
+
+        .key-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            align-items: center;
+
+            margin-bottom: 15px;
+        }
+
+        .key-header h3 {
+            font-size: 20px;
+        }
+
+        .key-input {
+            display: flex;
+
+            gap: 10px;
+        }
+
+        .key-input input {
+            flex: 1;
+
+            min-width: 0;
+
+            color: #a9d5ff;
+
+            background:
+                rgba(0,0,0,.25);
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            border-radius: 12px;
+
+            padding: 13px;
+
+            outline: none;
+
+            font-family: monospace;
+        }
+
+        .copy {
+            background:
+                linear-gradient(
+                    135deg,
+                    #0787ff,
+                    #0054dc
+                );
+
+            color: white;
+        }
+
+        /* =========================
+           TESTER
+        ========================= */
+
+        .tester {
+            margin-top: 45px;
+
+            padding: 28px;
+
+            border-radius: 24px;
+
+            background:
+                rgba(5,19,39,.78);
+
+            border:
+                1px solid var(--border);
+        }
+
+        .tester-grid {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 14px;
+        }
+
+        label {
+            display: block;
+
+            color: #8ca2bd;
+
+            font-size: 12px;
+
+            margin-bottom: 8px;
+        }
+
+        select,
+        input {
+            width: 100%;
+
+            padding: 13px;
+
+            border-radius: 12px;
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            background:
+                #06152b;
+
+            color: white;
+
+            outline: none;
+        }
+
+        .tester-action {
+            margin-top: 15px;
+
+            display: flex;
+
+            gap: 10px;
+        }
+
+        .response {
+            margin-top: 20px;
+
+            padding: 18px;
+
+            min-height: 150px;
+
+            border-radius: 15px;
+
+            background:
+                #010711;
+
+            border:
+                1px solid rgba(255,255,255,.07);
+
+            overflow: auto;
+        }
+
+        .response pre {
+            color: #9fd1ff;
+
+            font-size: 12px;
+
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            padding: 35px 0;
+
+            text-align: center;
+
+            color: #6e829d;
+
+            border-top:
+                1px solid rgba(255,255,255,.06);
+        }
+
+        footer strong {
+            color: #b9d9ff;
+        }
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        .toast {
+            position: fixed;
+
+            bottom: 25px;
+            left: 50%;
+
+            transform:
+                translate(-50%, 120px);
+
+            padding: 12px 18px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(8,20,40,.95);
+
+            border:
+                1px solid rgba(0,150,255,.25);
+
+            color: white;
+
+            transition: .3s;
+
+            z-index: 100;
+        }
+
+        .toast.show {
+            transform:
+                translate(-50%, 0);
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 45px;
+            }
+
+            .hero-grid {
+                grid-template-columns: 1fr;
+
+                text-align: center;
+            }
+
+            .hero p {
+                margin: auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-image {
+                order: -1;
+            }
+
+            .hero-image img {
+                max-width: 310px;
+            }
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .api-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tester-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .key-input {
+                flex-direction: column;
+            }
+        }
+
+    </style>
 </head>
 
 <body>
 
-    <!-- =========================
-         HERO
-    ========================== -->
+<nav>
+    <div class="container nav-content">
 
-    <header class="hero">
-
-        <div class="logo-container">
+        <div class="brand">
             <img
-                src="/assets/saitama.png"
+                src="https://files.catbox.moe/puoaqb.jpg"
                 alt="Saitama API"
-                class="logo"
             >
+
+            <span>Saitama API</span>
         </div>
 
-        <h1>Saitama API</h1>
-
-        <div class="welcome">
-            Welcome User 👋
+        <div class="nav-links">
+            <a href="#apis">APIs</a>
+            <a href="#tester">Tester</a>
+            <a href="#apikey">API Key</a>
         </div>
 
-        <p class="description">
-            APIs rápidas, simples y gratuitas para descargar,
-            buscar y procesar contenido desde diferentes plataformas.
-        </p>
-
-        <div class="hero-buttons">
-
-            <a
-                href="#apis"
-                class="btn primary"
-            >
-                Explorar APIs
-            </a>
-
-            <a
-                href="#tester"
-                class="btn secondary"
-            >
-                Probar API
-            </a>
-
-        </div>
-
-    </header>
+    </div>
+</nav>
 
 
-    <!-- =========================
-         STATS
-    ========================== -->
+<main>
 
-    <section class="stats">
+    <!-- HERO -->
 
-        <div class="stat-card">
-            <strong id="apiCount">10+</strong>
-            <span>APIs disponibles</span>
-        </div>
+    <section class="hero">
 
-        <div class="stat-card">
-            <strong class="status">
-                ● ONLINE
-            </strong>
-            <span>Estado del servicio</span>
-        </div>
+        <div class="container hero-grid">
 
-        <div class="stat-card">
-            <strong>FREE</strong>
-            <span>Acceso público</span>
+            <div>
+
+                <div class="badge">
+                    <span class="dot"></span>
+                    SAITAMA API · ONLINE
+                </div>
+
+                <h1>Saitama API</h1>
+
+                <h2>
+                    APIs rápidas para tus proyectos.
+                </h2>
+
+                <p>
+                    Descarga, busca y procesa contenido desde
+                    diferentes plataformas mediante una API
+                    sencilla, rápida y moderna.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a
+                        href="#apis"
+                        class="button primary"
+                    >
+                        Explorar APIs
+                    </a>
+
+                    <a
+                        href="#tester"
+                        class="button secondary"
+                    >
+                        Probar API
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="hero-image">
+
+                <img
+                    src="https://files.catbox.moe/puoaqb.jpg"
+                    alt="Saitama"
+                >
+
+            </div>
+
         </div>
 
     </section>
 
 
-    <!-- =========================
-         APIS
-    ========================== -->
+    <!-- ESTADÍSTICAS -->
 
-    <main>
+    <section>
 
-        <section
-            class="section"
-            id="apis"
-        >
+        <div class="container">
 
-            <div class="section-title">
+            <div class="stats">
 
-                <h2>APIs disponibles</h2>
+                <div class="stat">
 
-                <p>
-                    Explora nuestros endpoints y prueba cada API.
-                </p>
-
-            </div>
-
-
-            <div
-                class="api-grid"
-                id="apiGrid"
-            >
-
-                <!-- YouTube MP3 -->
-
-                <article class="api-card">
-
-                    <div class="api-top">
-
-                        <div>
-
-                            <span class="method-badge">
-                                GET
-                            </span>
-
-                            <h3>
-                                YouTube MP3
-                            </h3>
-
-                        </div>
-
-                        <span class="api-online">
-                            ●
-                        </span>
-
+                    <div class="stat-label">
+                        Solicitudes usadas
                     </div>
 
-                    <p>
-                        Descarga audio MP3 desde un enlace
-                        de YouTube.
-                    </p>
-
-                    <code class="api-endpoint">
-                        /api/ytmp3?url=
-                    </code>
-
-                    <button
-                        class="try-button"
-                        onclick="testAPI('ytmp3')"
+                    <div
+                        class="stat-value"
+                        id="requests"
                     >
-                        Probar API
-                    </button>
-
-                </article>
-
-
-                <!-- YouTube MP4 -->
-
-                <article class="api-card">
-
-                    <div class="api-top">
-
-                        <div>
-
-                            <span class="method-badge">
-                                GET
-                            </span>
-
-                            <h3>
-                                YouTube MP4
-                            </h3>
-
-                        </div>
-
-                        <span class="api-online">
-                            ●
-                        </span>
-
+                        0
                     </div>
 
-                    <p>
-                        Descarga videos de YouTube
-                        en formato MP4.
-                    </p>
+                </div>
 
-                    <code class="api-endpoint">
-                        /api/ytmp4?url=
-                    </code>
 
-                    <button
-                        class="try-button"
-                        onclick="testAPI('ytmp4')"
+                <div class="stat">
+
+                    <div class="stat-label">
+                        Límite
+                    </div>
+
+                    <div class="stat-value">
+                        ∞ Ilimitadas
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-label">
+                        APIs
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="apiCount"
                     >
-                        Probar API
-                    </button>
-
-                </article>
-
-
-                <!-- PLAY -->
-
-                <article class="api-card">
-
-                    <div class="api-top">
-
-                        <div>
-
-                            <span class="method-badge">
-                                GET
-                            </span>
-
-                            <h3>
-                                Play
-                            </h3>
-
-                        </div>
-
-                        <span class="api-online">
-                            ●
-                        </span>
-
+                        10+
                     </div>
 
-                    <p>
-                        Busca una canción y obtiene
-                        el audio para reproducir o descargar.
-                    </p>
-
-                    <code class="api-endpoint">
-                        /api/play?q=
-                    </code>
-
-                    <button
-                        class="try-button"
-                        onclick="testAPI('play')"
-                    >
-                        Probar API
-                    </button>
-
-                </article>
+                </div>
 
 
-                <!-- PLAY 2 -->
+                <div class="stat">
 
-                <article class="api-card">
-
-                    <div class="api-top">
-
-                        <div>
-
-                            <span class="method-badge">
-                                GET
-                            </span>
-
-                            <h3>
-                                Play 2
-                            </h3>
-
-                        </div>
-
-                        <span class="api-online">
-                            ●
-                        </span>
-
+                    <div class="stat-label">
+                        Estado
                     </div>
 
-                    <p>
-                        Busca videos y obtiene
-                        el contenido en formato MP4.
-                    </p>
-
-                    <code class="api-endpoint">
-                        /api/play2?q=
-                    </code>
-
-                    <button
-                        class="try-button"
-                        onclick="testAPI('play2')"
-                    >
-                        Probar API
-                    </button>
-
-                </article>
-
-
-                <!-- YT SEARCH -->
-
-                <article class="api-card">
-
-                    <div class="api-top">
-
-                        <div>
-
-                            <span class="method-badge">
-                                GET
-                            </span>
-
-                            <h3>
-                                YouTube Search
-                            </h3>
-
-                        </div>
-
-                        <span class="api-online">
-                            ●
-                        </span>
-
-                    </div>
-
-                    <p>
-                        Busca videos de YouTube y devuelve
-                        hasta 10 resultados.
-                    </p>
-
-                    <code class="api-endpoint">
-                        /api/ytsearch?q=
-                    </code>
-
-                    <button
-                        class="try-button"
-                        onclick="testAPI('ytsearch')"
-                    >
-                        Probar API
-                    </button>
-
-                </article>
-
-
-                <!-- TIKTOK DOWNLOAD -->
-
-                <article class="api-card">
-
-                    <div class="api-top">
-
-                        <div>
-
-                            <span class="method-badge">
-                                GET
-                            </span>
-
-                            <h3>
-                                TikTok Downloader
-                            </h3>
-
-                        </div>
-
-                        <span class="api-online">
-                            ●
-                        </span>
-
-                    </div>
-
-                    <p>
-                        Descarga videos e imágenes
-                        públicas de TikTok.
-                    </p>
-
-                    <code class="api-endpoint">
-                        /api/tiktokdl?url=
-                    </code>
-
-                    <button
-                        class="try-button"
-                        onclick="testAPI('tiktokdl')"
-                    >
-                        Probar API
-                    </button>
-
-                </article>
-
-
-                <!-- TIKTOK SEARCH -->
-
-                <article class="api-card">
-
-                    <div class="api-top">
-
-                        <div>
-
-                            <span class="method-badge">
-                                GET
-                            </span>
-
-                            <h3>
-                                TikTok Search
-                            </h3>
-
-                        </div>
-
-                        <span class="api-online">
-                            ●
-                        </span>
-
-                    </div>
-
-                    <p>
-                        Busca contenido de TikTok
-                        y devuelve hasta 10 resultados.
-                    </p>
-
-                    <code class="api-endpoint">
-                        /api/tiktoksearch?q=
-                    </code>
-
-                    <button
-                        class="try-button"
-                        onclick="testAPI('tiktoksearch')"
-                    >
-                        Probar API
-                    </button>
-
-                </article>
-
-
-                <!-- FACEBOOK -->
-
-                <article class="api-card">
-
-                    <div class="api-top">
-
-                        <div>
-
-                            <span class="method-badge">
-                                GET
-                            </span>
-
-                            <h3>
-                                Facebook Downloader
-                            </h3>
-
-                        </div>
-
-                        <span class="api-online">
-                            ●
-                        </span>
-
-                    </div>
-
-                    <p>
-                        Descarga videos públicos
-                        desde Facebook.
-                    </p>
-
-                    <code class="api-endpoint">
-                        /api/facebookdl?url=
-                    </code>
-
-                    <button
-                        class="try-button"
-                        onclick="testAPI('facebookdl')"
-                    >
-                        Probar API
-                    </button>
-
-                </article>
-
-
-                <!-- INSTAGRAM -->
-
-                <article class="api-card">
-
-                    <div class="api-top">
-
-                        <div>
-
-                            <span class="method-badge">
-                                GET
-                            </span>
-
-                            <h3>
-                                Instagram Downloader
-                            </h3>
-
-                        </div>
-
-                        <span class="api-online">
-                            ●
-                        </span>
-
-                    </div>
-
-                    <p>
-                        Obtén contenido público de Instagram,
-                        incluyendo fotos y videos.
-                    </p>
-
-                    <code class="api-endpoint">
-                        /api/instagramdl?url=
-                    </code>
-
-                    <button
-                        class="try-button"
-                        onclick="testAPI('instagramdl')"
-                    >
-                        Probar API
-                    </button>
-
-                </article>
-
-
-                <!-- SPOTIFY -->
-
-                <article class="api-card">
-
-                    <div class="api-top">
-
-                        <div>
-
-                            <span class="method-badge">
-                                GET
-                            </span>
-
-                            <h3>
-                                Spotify Search
-                            </h3>
-
-                        </div>
-
-                        <span class="api-online">
-                            ●
-                        </span>
-
-                    </div>
-
-                    <p>
-                        Busca canciones y devuelve información
-                        y URLs disponibles.
-                    </p>
-
-                    <code class="api-endpoint">
-                        /api/spotifysearch?q=
-                    </code>
-
-                    <button
-                        class="try-button"
-                        onclick="testAPI('spotifysearch')"
-                    >
-                        Probar API
-                    </button>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             API TESTER
-        ========================== -->
-
-        <section
-            class="section tester-section"
-            id="tester"
-        >
-
-            <div class="section-title">
-
-                <h2>API Tester</h2>
-
-                <p>
-                    Prueba cualquier endpoint directamente
-                    desde este panel.
-                </p>
-
-            </div>
-
-
-            <div class="tester-card">
-
-                <div class="tester-header">
-
-                    <div>
-
-                        <h2>
-                            Probar endpoint
-                        </h2>
-
-                        <p>
-                            Introduce los parámetros
-                            y ejecuta la petición.
-                        </p>
-
-                    </div>
-
-                    <span class="api-online">
+                    <div class="stat-value online">
                         ● ONLINE
-                    </span>
+                    </div>
 
                 </div>
-
-
-                <!-- ENDPOINT -->
-
-                <label>
-                    Endpoint
-                </label>
-
-                <div class="endpoint-box">
-
-                    <span>
-                        GET
-                    </span>
-
-                    <input
-                        type="text"
-                        id="endpoint"
-                        placeholder="/api/ytsearch"
-                    >
-
-                </div>
-
-
-                <!-- PARAMETER -->
-
-                <div
-                    class="parameter"
-                    id="parameterContainer"
-                >
-
-                    <label>
-                        Parámetro
-                    </label>
-
-                    <input
-                        type="text"
-                        id="parameter"
-                        placeholder="URL o búsqueda"
-                    >
-
-                </div>
-
-
-                <!-- API KEY -->
-
-                <label>
-                    API Key
-                </label>
-
-                <input
-                    type="text"
-                    id="apikey"
-                    placeholder="Opcional"
-                >
-
-
-                <!-- SEND -->
-
-                <button
-                    class="send-button"
-                    onclick="sendRequest()"
-                >
-                    Ejecutar petición
-                </button>
-
-
-                <!-- RESPONSE -->
-
-                <div class="response-title">
-                    Respuesta JSON
-                </div>
-
-                <pre id="response">Esperando petición...</pre>
 
             </div>
 
-        </section>
-
-    </main>
-
-
-    <!-- =========================
-         FOOTER
-    ========================== -->
-
-    <footer>
-
-        <div>
-            <strong>Saitama API</strong>
         </div>
 
-        <div>
-            APIs gratuitas para desarrolladores.
-        </div>
-
-        <div>
-            © 2026 Saitama API · SaiDev145
-        </div>
-
-    </footer>
+    </section>
 
 
-    <!-- =========================
-         JAVASCRIPT
-    ========================== -->
+    <!-- APIS -->
 
-    <script src="/script.js"></script>
+    <section id="apis">
 
-</body>
-</html>
+        <div class="container">
+
+            <div class="section-title">
+
+                <h2>
+                    APIs disponibles
+                </h2>
+
+                <p>
+                    Explora nuestros endpoints y prueba
+                    cada API dire
