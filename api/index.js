@@ -1,13 +1,21 @@
-function apiHandler(req, res) {
+const express = require('express')
 
-    res.status(200).json({
+const app = express()
+
+app.get('/', (req, res) => {
+    res.json({
+        status: true,
+        message: 'Saitama API funcionando',
+        creator: 'SaiDev145'
+    })
+})
+
+app.get('/saitama/api/test', (req, res) => {
+    res.json({
         status: true,
         code: 200,
-        creator: 'SaiDev145',
-        message: 'Saitama API funcionando',
-        version: '1.0.0'
+        message: 'Test OK'
     })
+})
 
-}
-
-module.exports = apiHandler
+module.exports = app
