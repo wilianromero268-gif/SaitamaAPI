@@ -308,10 +308,10 @@ app.use((err, req, res, next) => {
 // SERVIDOR
 // ========================================
 
-app.listen(PORT, () => {
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Saitama API running on port ${PORT}`)
+    })
+}
 
-    console.log(
-        `Saitama API running on port ${PORT}`
-    )
-
-})
+module.exports = app
