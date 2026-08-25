@@ -1,0 +1,4147 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#061b3d"
+    >
+
+    <meta
+        name="description"
+        content="Saitama API — APIs rápidas, modernas y fáciles de usar."
+    >
+
+    <title>Saitama API</title>
+
+
+    <style>
+
+        /* =====================================================
+           SAITAMA API
+           DESIGN SYSTEM
+        ===================================================== */
+
+        :root {
+
+            --blue: #168cff;
+            --blue2: #0062ff;
+            --cyan: #00d9ff;
+
+            --dark: #020817;
+            --dark2: #04142e;
+            --dark3: #071d3e;
+
+            --card: rgba(5, 25, 54, .78);
+
+            --border:
+                rgba(71, 163, 255, .18);
+
+            --border-hover:
+                rgba(45, 162, 255, .48);
+
+            --text: #f5f9ff;
+
+            --muted: #8fa6c4;
+
+            --green: #20e58a;
+
+            --red: #ff5470;
+
+            --yellow: #ffc857;
+
+            --shadow:
+                0 25px 80px rgba(0, 0, 0, .35);
+
+            --radius: 22px;
+
+        }
+
+
+        * {
+
+            margin: 0;
+            padding: 0;
+
+            box-sizing: border-box;
+
+        }
+
+
+        html {
+
+            scroll-behavior: smooth;
+
+        }
+
+
+        body {
+
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            color: var(--text);
+
+            min-height: 100vh;
+
+            background:
+
+                radial-gradient(
+                    circle at 10% 5%,
+                    rgba(0, 119, 255, .32),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 90% 15%,
+                    rgba(0, 217, 255, .17),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 50% 70%,
+                    rgba(0, 81, 255, .10),
+                    transparent 35%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #010611,
+                    #031634 45%,
+                    #020817
+                );
+
+            overflow-x: hidden;
+
+        }
+
+
+        /* =====================================================
+           BACKGROUND
+        ===================================================== */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            background-image:
+
+                linear-gradient(
+                    rgba(255,255,255,.018) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.018) 1px,
+                    transparent 1px
+                );
+
+            background-size: 42px 42px;
+
+            pointer-events: none;
+
+            z-index: -2;
+
+        }
+
+
+        body::after {
+
+            content: "";
+
+            position: fixed;
+
+            width: 500px;
+            height: 500px;
+
+            left: 50%;
+            top: 15%;
+
+            transform:
+                translate(-50%, -50%);
+
+            background:
+                rgba(0, 128, 255, .12);
+
+            filter:
+                blur(120px);
+
+            pointer-events: none;
+
+            z-index: -3;
+
+        }
+
+
+        .container {
+
+            width:
+                min(1180px, 92%);
+
+            margin:
+                auto;
+
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        nav {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+
+            background:
+                rgba(1, 8, 22, .72);
+
+            backdrop-filter:
+                blur(22px);
+
+            -webkit-backdrop-filter:
+                blur(22px);
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.06);
+
+        }
+
+
+        .nav-content {
+
+            min-height: 72px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content:
+                space-between;
+
+            gap: 20px;
+
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            font-size: 19px;
+
+            font-weight: 900;
+
+        }
+
+
+        .brand-image {
+
+            width: 43px;
+            height: 43px;
+
+            border-radius: 13px;
+
+            object-fit: cover;
+
+            border:
+                1px solid
+                rgba(255,255,255,.16);
+
+            box-shadow:
+                0 0 30px
+                rgba(0, 140, 255, .40);
+
+        }
+
+
+        .brand span {
+
+            background:
+
+                linear-gradient(
+                    100deg,
+                    #fff,
+                    #8dd5ff,
+                    #19baff
+                );
+
+            -webkit-background-clip:
+                text;
+
+            background-clip:
+                text;
+
+            color: transparent;
+
+        }
+
+
+        .nav-links {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+        }
+
+
+        .nav-links a {
+
+            color:
+                #9db2cd;
+
+            text-decoration: none;
+
+            padding:
+                10px 14px;
+
+            border-radius:
+                11px;
+
+            font-size: 14px;
+
+            transition:
+                .2s;
+
+        }
+
+
+        .nav-links a:hover {
+
+            color: white;
+
+            background:
+                rgba(255,255,255,.07);
+
+        }
+
+
+        .nav-status {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding:
+                8px 12px;
+
+            border-radius:
+                999px;
+
+            background:
+                rgba(32,229,138,.07);
+
+            border:
+                1px solid
+                rgba(32,229,138,.15);
+
+            color:
+                #8df4c1;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+        }
+
+
+        .status-dot {
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background:
+                var(--green);
+
+            box-shadow:
+                0 0 14px
+                var(--green);
+
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+
+            padding:
+                85px 0 65px;
+
+            position: relative;
+
+        }
+
+
+        .hero-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1.05fr .95fr;
+
+            align-items: center;
+
+            gap: 70px;
+
+        }
+
+
+        .hero-badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding:
+                8px 13px;
+
+            border-radius:
+                999px;
+
+            color:
+                #8dccff;
+
+            background:
+                rgba(0,128,255,.09);
+
+            border:
+                1px solid
+                rgba(0,151,255,.23);
+
+            font-size: 12px;
+
+            font-weight: 900;
+
+            margin-bottom:
+                22px;
+
+        }
+
+
+        .hero h1 {
+
+            font-size:
+                clamp(48px, 8vw, 88px);
+
+            line-height:
+                .92;
+
+            letter-spacing:
+                -5px;
+
+            margin-bottom:
+                22px;
+
+            background:
+
+                linear-gradient(
+                    100deg,
+                    #ffffff 5%,
+                    #9bdcff 45%,
+                    #19bfff 90%
+                );
+
+            -webkit-background-clip:
+                text;
+
+            background-clip:
+                text;
+
+            color:
+                transparent;
+
+        }
+
+
+        .hero h2 {
+
+            font-size:
+                clamp(20px, 3vw, 29px);
+
+            color:
+                #dcecff;
+
+            margin-bottom:
+                16px;
+
+        }
+
+
+        .hero-description {
+
+            max-width:
+                610px;
+
+            color:
+                var(--muted);
+
+            line-height:
+                1.75;
+
+            font-size:
+                16px;
+
+        }
+
+
+        .hero-buttons {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 11px;
+
+            margin-top:
+                30px;
+
+        }
+
+
+        .button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            padding:
+                13px 19px;
+
+            border-radius:
+                13px;
+
+            text-decoration: none;
+
+            font-weight:
+                850;
+
+            font-size:
+                14px;
+
+            cursor: pointer;
+
+            transition:
+                .22s;
+
+        }
+
+
+        .button-primary {
+
+            color:
+                white;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--blue2)
+                );
+
+            box-shadow:
+                0 12px 38px
+                rgba(0,111,255,.30);
+
+        }
+
+
+        .button-primary:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 18px 48px
+                rgba(0,111,255,.46);
+
+        }
+
+
+        .button-secondary {
+
+            color:
+                #d7eaff;
+
+            background:
+                rgba(255,255,255,.055);
+
+            border:
+                1px solid
+                rgba(255,255,255,.10);
+
+        }
+
+
+        .button-secondary:hover {
+
+            background:
+                rgba(255,255,255,.10);
+
+        }
+
+
+        /* =====================================================
+           HERO IMAGE
+        ===================================================== */
+
+        .hero-visual {
+
+            position: relative;
+
+        }
+
+
+        .hero-glow {
+
+            position: absolute;
+
+            width: 330px;
+            height: 330px;
+
+            left: 50%;
+            top: 50%;
+
+            transform:
+                translate(-50%, -50%);
+
+            background:
+                rgba(0,133,255,.25);
+
+            filter:
+                blur(90px);
+
+            z-index: -1;
+
+        }
+
+
+        .hero-image {
+
+            width: 100%;
+
+            max-width:
+                450px;
+
+            display: block;
+
+            margin:
+                auto;
+
+            border-radius:
+                30px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.16);
+
+            box-shadow:
+
+                0 35px 100px
+                rgba(0,0,0,.55),
+
+                0 0 60px
+                rgba(0,128,255,.22);
+
+            transform:
+                rotate(1deg);
+
+            transition:
+                .4s;
+
+        }
+
+
+        .hero-image:hover {
+
+            transform:
+                rotate(0deg)
+                scale(1.015);
+
+        }
+
+
+        /* =====================================================
+           DASHBOARD STATS
+        ===================================================== */
+
+        .dashboard {
+
+            margin-bottom:
+                70px;
+
+        }
+
+
+        .stats-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 14px;
+
+        }
+
+
+        .stat-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            padding:
+                21px;
+
+            min-height:
+                120px;
+
+            border-radius:
+                19px;
+
+            background:
+
+                linear-gradient(
+                    145deg,
+                    rgba(7,29,59,.82),
+                    rgba(3,15,33,.76)
+                );
+
+            border:
+                1px solid
+                var(--border);
+
+            backdrop-filter:
+                blur(18px);
+
+        }
+
+
+        .stat-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 100px;
+            height: 100px;
+
+            right: -45px;
+            bottom: -50px;
+
+            background:
+                rgba(0,138,255,.18);
+
+            filter:
+                blur(35px);
+
+        }
+
+
+        .stat-label {
+
+            color:
+                #7892b1;
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                1.2px;
+
+            margin-bottom:
+                10px;
+
+        }
+
+
+        .stat-value {
+
+            font-size:
+                27px;
+
+            font-weight:
+                900;
+
+        }
+
+
+        .stat-small {
+
+            margin-top:
+                6px;
+
+            color:
+                #7187a4;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .online {
+
+            color:
+                var(--green);
+
+        }
+
+
+        /* =====================================================
+           SECTION
+        ===================================================== */
+
+        section {
+
+            padding:
+                25px 0 75px;
+
+        }
+
+
+        .section-heading {
+
+            margin-bottom:
+                25px;
+
+        }
+
+
+        .section-heading h2 {
+
+            font-size:
+                clamp(27px, 4vw, 36px);
+
+            margin-bottom:
+                7px;
+
+        }
+
+
+        .section-heading p {
+
+            color:
+                var(--muted);
+
+            font-size:
+                14px;
+
+        }
+
+
+        /* =====================================================
+           API CARDS
+        ===================================================== */
+
+        .api-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap:
+                16px;
+
+        }
+
+
+        .api-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            padding:
+                23px;
+
+            border-radius:
+                var(--radius);
+
+            background:
+
+                linear-gradient(
+                    145deg,
+                    rgba(8,32,66,.86),
+                    rgba(3,15,32,.76)
+                );
+
+            border:
+                1px solid
+                var(--border);
+
+            transition:
+                .25s;
+
+        }
+
+
+        .api-card:hover {
+
+            transform:
+                translateY(-4px);
+
+            border-color:
+                var(--border-hover);
+
+            box-shadow:
+                0 22px 60px
+                rgba(0,0,0,.30);
+
+        }
+
+
+        .api-top {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content:
+                space-between;
+
+            gap: 12px;
+
+            margin-bottom:
+                17px;
+
+        }
+
+
+        .api-icon {
+
+            width: 47px;
+            height: 47px;
+
+            border-radius:
+                14px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content:
+                center;
+
+            font-size:
+                21px;
+
+            background:
+
+                linear-gradient(
+                    145deg,
+                    rgba(0,145,255,.22),
+                    rgba(0,76,255,.08)
+                );
+
+            border:
+                1px solid
+                rgba(0,156,255,.18);
+
+        }
+
+
+        .api-method {
+
+            margin-left:
+                auto;
+
+            padding:
+                6px 9px;
+
+            border-radius:
+                7px;
+
+            color:
+                #69c0ff;
+
+            background:
+                rgba(0,138,255,.10);
+
+            font-size:
+                10px;
+
+            font-weight:
+                900;
+
+        }
+
+
+        .api-online {
+
+            color:
+                var(--green);
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .api-card h3 {
+
+            font-size:
+                19px;
+
+            margin-bottom:
+                8px;
+
+        }
+
+
+        .api-card p {
+
+            color:
+                var(--muted);
+
+            line-height:
+                1.55;
+
+            font-size:
+                13px;
+
+            min-height:
+                42px;
+
+        }
+
+
+        .endpoint-row {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-top:
+                17px;
+
+        }
+
+
+        .endpoint {
+
+            flex: 1;
+
+            min-width: 0;
+
+            padding:
+                11px 12px;
+
+            border-radius:
+                11px;
+
+            background:
+                rgba(0,0,0,.23);
+
+            border:
+                1px solid
+                rgba(255,255,255,.06);
+
+        }
+
+
+        .endpoint code {
+
+            display: block;
+
+            color:
+                #83c9ff;
+
+            font-size:
+                11px;
+
+            white-space:
+                nowrap;
+
+            overflow:
+                hidden;
+
+            text-overflow:
+                ellipsis;
+
+        }
+
+
+        .test-api-btn {
+
+            border:
+                1px solid
+                rgba(0,145,255,.25);
+
+            background:
+                rgba(0,128,255,.13);
+
+            color:
+                #bce3ff;
+
+            padding:
+                10px 13px;
+
+            border-radius:
+                10px;
+
+            cursor:
+                pointer;
+
+            font-weight:
+                800;
+
+            font-size:
+                11px;
+
+            white-space:
+                nowrap;
+
+            transition:
+                .2s;
+
+        }
+
+
+        .test-api-btn:hover {
+
+            background:
+                var(--blue);
+
+            color:
+                white;
+
+        }
+
+
+        /* =====================================================
+           API KEY
+        ===================================================== */
+      .key-panel {
+
+            margin-top:
+                30px;
+
+            padding:
+                25px;
+
+            border-radius:
+                23px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    rgba(0,106,230,.18),
+                    rgba(3,17,39,.75)
+                );
+
+            border:
+                1px solid
+                rgba(0,145,255,.25);
+
+            box-shadow:
+                var(--shadow);
+
+        }
+
+
+        .key-header {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            gap: 15px;
+
+            margin-bottom:
+                14px;
+
+        }
+
+
+        .key-header h3 {
+
+            font-size:
+                19px;
+
+        }
+
+
+        .key-header span {
+
+            color:
+                #7892b0;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .key-row {
+
+            display: flex;
+
+            gap:
+                10px;
+
+        }
+
+
+        .key-row input {
+
+            flex: 1;
+
+            min-width:
+                0;
+
+            padding:
+                13px;
+
+            border-radius:
+                12px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            background:
+                rgba(0,0,0,.28);
+
+            color:
+                #a9d9ff;
+
+            outline:
+                none;
+
+            font-family:
+                monospace;
+
+        }
+
+
+        .key-btn {
+
+            border:
+                0;
+
+            padding:
+                0 17px;
+
+            border-radius:
+                12px;
+
+            color:
+                white;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #078cff,
+                    #0052dd
+                );
+
+            font-weight:
+                850;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        .key-note {
+
+            color:
+                #6f87a4;
+
+            font-size:
+                11px;
+
+            margin-top:
+                10px;
+
+        }
+
+
+        /* =====================================================
+           TESTER
+        ===================================================== */
+
+        .tester {
+
+            margin-top:
+                35px;
+
+            padding:
+                27px;
+
+            border-radius:
+                24px;
+
+            background:
+                rgba(4,20,42,.80);
+
+            border:
+                1px solid
+                var(--border);
+
+            box-shadow:
+                var(--shadow);
+
+        }
+
+
+        .tester-head {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            gap: 15px;
+
+            margin-bottom:
+                20px;
+
+        }
+
+
+        .tester-head h2 {
+
+            font-size:
+                22px;
+
+        }
+
+
+        .tester-head span {
+
+            color:
+                #6f88a6;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .tester-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap:
+                14px;
+
+        }
+
+
+        .field label {
+
+            display: block;
+
+            margin-bottom:
+                7px;
+
+            color:
+                #849ab7;
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            text-transform:
+                uppercase;
+
+        }
+
+
+        select,
+        .field input {
+
+            width:
+                100%;
+
+            padding:
+                13px;
+
+            border-radius:
+                12px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            background:
+                #06152b;
+
+            color:
+                white;
+
+            outline:
+                none;
+
+        }
+
+
+        select:focus,
+        .field input:focus {
+
+            border-color:
+                rgba(0,145,255,.55);
+
+        }
+
+
+        .tester-buttons {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap:
+                9px;
+
+            margin-top:
+                15px;
+
+        }
+
+
+        .run-btn {
+
+            border:
+                0;
+
+            color:
+                white;
+
+            padding:
+                12px 18px;
+
+            border-radius:
+                11px;
+
+            cursor:
+                pointer;
+
+            font-weight:
+                850;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #0c91ff,
+                    #0058e6
+                );
+
+        }
+
+
+        .clear-btn {
+
+            border:
+                1px solid
+                rgba(255,255,255,.09);
+
+            color:
+                #c5d7ec;
+
+            padding:
+                12px 17px;
+
+            border-radius:
+                11px;
+
+            background:
+                rgba(255,255,255,.05);
+
+            cursor:
+                pointer;
+
+        }
+
+
+        .url-preview {
+
+            margin-top:
+                18px;
+
+            padding:
+                13px;
+
+            border-radius:
+                12px;
+
+            background:
+                #010711;
+
+            border:
+                1px solid
+                rgba(255,255,255,.06);
+
+        }
+
+
+        .url-preview-title {
+
+            color:
+                #6f87a4;
+
+            font-size:
+                10px;
+
+            text-transform:
+                uppercase;
+
+            font-weight:
+                800;
+
+            margin-bottom:
+                7px;
+
+        }
+
+
+        .url-preview code {
+
+            color:
+                #82c9ff;
+
+            font-size:
+                11px;
+
+            word-break:
+                break-all;
+
+        }
+
+
+        .response {
+
+            margin-top:
+                15px;
+
+            padding:
+                17px;
+
+            min-height:
+                190px;
+
+            max-height:
+                500px;
+
+            overflow:
+                auto;
+
+            border-radius:
+                15px;
+
+            background:
+                #01060d;
+
+            border:
+                1px solid
+                rgba(255,255,255,.07);
+
+        }
+
+
+        .response-head {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            margin-bottom:
+                10px;
+
+        }
+
+
+        .response-head span {
+
+            color:
+                #7188a4;
+
+            font-size:
+                10px;
+
+            text-transform:
+                uppercase;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .response pre {
+
+            color:
+                #9ed3ff;
+
+            font-family:
+                "JetBrains Mono",
+                Consolas,
+                monospace;
+
+            font-size:
+                11px;
+
+            line-height:
+                1.65;
+
+            white-space:
+                pre-wrap;
+
+            word-break:
+                break-word;
+
+        }
+
+
+        /* =====================================================
+           MUSIC
+        ===================================================== */
+
+        .music-control {
+
+            position: fixed;
+
+            right:
+                20px;
+
+            bottom:
+                20px;
+
+            z-index:
+                90;
+
+            width:
+                49px;
+
+            height:
+                49px;
+
+            border-radius:
+                50%;
+
+            border:
+                1px solid
+                rgba(0,153,255,.28);
+
+            background:
+                rgba(3,22,46,.90);
+
+            color:
+                #9bd9ff;
+
+            cursor:
+                pointer;
+
+            box-shadow:
+                0 10px 35px
+                rgba(0,0,0,.35);
+
+            backdrop-filter:
+                blur(15px);
+
+        }
+
+
+        .music-control.playing {
+
+            color:
+                white;
+
+            background:
+                var(--blue);
+
+            box-shadow:
+                0 0 30px
+                rgba(0,136,255,.45);
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+
+            margin-top:
+                30px;
+
+            padding:
+                45px 0 30px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.06);
+
+        }
+
+
+        .footer-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1.5fr 1fr 1fr;
+
+            gap:
+                35px;
+
+        }
+
+
+        .footer-brand {
+
+            font-size:
+                20px;
+
+            font-weight:
+                900;
+
+            margin-bottom:
+                10px;
+
+        }
+
+
+        footer p {
+
+            color:
+                #6f829c;
+
+            line-height:
+                1.6;
+
+            font-size:
+                13px;
+
+        }
+
+
+        .footer-title {
+
+            color:
+                #dceaff;
+
+            font-weight:
+                800;
+
+            margin-bottom:
+                12px;
+
+        }
+
+
+        .footer-links {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                8px;
+
+        }
+
+
+        .footer-links a {
+
+            color:
+                #7188a5;
+
+            text-decoration:
+                none;
+
+            font-size:
+                13px;
+
+        }
+
+
+        .footer-links a:hover {
+
+            color:
+                #71c4ff;
+
+        }
+
+
+        .copyright {
+
+            text-align:
+                center;
+
+            padding-top:
+                30px;
+
+            margin-top:
+                30px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.05);
+
+            color:
+                #566a84;
+
+            font-size:
+                12px;
+
+        }
+
+
+        /* =====================================================
+           TOAST
+        ===================================================== */
+
+        .toast {
+
+            position:
+                fixed;
+
+            left:
+                50%;
+
+            bottom:
+                28px;
+
+            transform:
+                translate(-50%, 100px);
+
+            padding:
+                12px 17px;
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(5,20,40,.96);
+
+            border:
+                1px solid
+                rgba(0,145,255,.25);
+
+            color:
+                white;
+
+            font-size:
+                13px;
+
+            z-index:
+                200;
+
+            transition:
+                .3s;
+
+        }
+
+
+        .toast.show {
+
+            transform:
+                translate(-50%, 0);
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media(max-width: 850px) {
+
+            .nav-links {
+
+                display:
+                    none;
+
+            }
+
+
+            .hero {
+
+                padding-top:
+                    48px;
+
+            }
+
+
+            .hero-grid {
+
+                grid-template-columns:
+                    1fr;
+
+                text-align:
+                    center;
+
+                gap:
+                    40px;
+
+            }
+
+
+            .hero-visual {
+
+                order:
+                    -1;
+
+            }
+
+
+            .hero-image {
+
+                max-width:
+                    310px;
+
+            }
+
+
+            .hero-description {
+
+                margin:
+                    auto;
+
+            }
+
+
+            .hero-buttons {
+
+                justify-content:
+                    center;
+
+            }
+
+
+            .stats-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+
+            .api-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .tester-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .footer-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+        }
+
+
+        @media(max-width: 520px) {
+
+            .container {
+
+                width:
+                    min(94%, 1180px);
+
+            }
+
+
+            .hero h1 {
+
+                font-size:
+                    52px;
+
+                letter-spacing:
+                    -3px;
+
+            }
+
+
+            .stats-grid {
+
+                grid-template-columns:
+                    1fr 1fr;
+
+                gap:
+                    9px;
+
+            }
+
+
+            .stat-card {
+
+                padding:
+                    16px;
+
+            }
+
+
+            .stat-value {
+
+                font-size:
+                    21px;
+
+            }
+
+
+            .api-card {
+
+                padding:
+                    19px;
+
+            }
+
+
+            .endpoint-row {
+
+                align-items:
+                    stretch;
+
+                flex-direction:
+                    column;
+
+            }
+
+
+            .test-api-btn {
+
+                width:
+                    100%;
+
+            }
+
+
+            .key-row {
+
+                flex-direction:
+                    column;
+
+            }
+
+
+            .key-btn {
+
+                padding:
+                    13px;
+
+            }
+
+
+            .tester {
+
+                padding:
+                    19px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav>
+
+    <div class="container nav-content">
+
+        <div class="brand">
+
+            <img
+                class="brand-image"
+                src="https://files.catbox.moe/puoaqb.jpg"
+                alt="Saitama API"
+            >
+
+            <span>Saitama API</span>
+
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="#inicio">
+                Inicio
+            </a>
+
+            <a href="#apis">
+                Endpoints
+            </a>
+
+            <a href="#tester">
+                Tester
+            </a>
+
+            <a href="#apikey">
+                API Key
+            </a>
+
+        </div>
+
+
+        <div class="nav-status">
+
+            <span class="status-dot"></span>
+
+            ONLINE
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<main id="inicio">
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="hero">
+
+    <div class="container hero-grid">
+
+
+        <div>
+
+            <div class="hero-badge">
+
+                <span class="status-dot"></span>
+
+                SAITAMA API · SYSTEM ONLINE
+
+            </div>
+
+
+            <h1>
+                Saitama<br>
+                API
+            </h1>
+
+
+            <h2>
+                APIs rápidas para tus proyectos.
+            </h2>
+
+
+            <p class="hero-description">
+
+                Una plataforma moderna para descargar,
+                buscar y procesar contenido mediante
+                endpoints rápidos, simples y fáciles
+                de integrar.
+
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a
+                    href="#apis"
+                    class="button button-primary"
+                >
+                    ⚡ Explorar APIs
+                </a>
+
+
+                <a
+                    href="#tester"
+                    class="button button-secondary"
+                >
+                    ▶ Probar API
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-visual">
+
+            <div class="hero-glow"></div>
+
+
+            <img
+                class="hero-image"
+                src="https://files.catbox.moe/puoaqb.jpg"
+                alt="Saitama"
+            >
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     STATS
+========================================================= -->
+
+<section class="dashboard">
+
+    <div class="container">
+
+        <div class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    Requests
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="totalRequests"
+                >
+                    0
+                </div>
+
+                <div class="stat-small">
+                    Total de solicitudes
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    Hoy
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="todayRequests"
+                >
+                    0
+                </div>
+
+                <div class="stat-small">
+                    Solicitudes de hoy
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    Endpoints
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="endpointCount"
+                >
+                    10
+                </div>
+
+                <div class="stat-small">
+                    APIs disponibles
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    Estado
+                </div>
+
+                <div class="stat-value online">
+                    ● ONLINE
+                </div>
+
+                <div class="stat-small">
+                    Saitama API activa
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     APIS
+========================================================= -->
+<section id="apis">
+
+    <div class="container">
+
+
+        <div class="section-heading">
+
+            <h2>
+                Endpoints
+            </h2>
+
+            <p>
+                Explora, copia y prueba las APIs de Saitama.
+            </p>
+
+        </div>
+
+
+        <div class="api-grid" id="apiGrid">
+
+
+            <!-- YTMP3 -->
+
+            <article class="api-card">
+
+                <div class="api-top">
+
+                    <div class="api-icon">
+                        🎵
+                    </div>
+
+                    <span class="api-method">
+                        GET
+                    </span>
+
+                    <span class="api-online">
+                        ● ONLINE
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    YouTube MP3
+                </h3>
+
+                <p>
+                    Convierte un vídeo de YouTube
+                    a audio MP3.
+                </p>
+
+
+                <div class="endpoint-row">
+
+                    <div class="endpoint">
+
+                        <code>
+                            /saitama/api/ytmp3
+                        </code>
+
+                    </div>
+
+
+                    <button
+                        class="test-api-btn"
+                        onclick="testAPI('ytmp3')"
+                    >
+                        ▶ Probar
+                    </button>
+
+                </div>
+
+            </article>
+            <!-- YTMP4 -->
+
+            <article class="api-card">
+
+                <div class="api-top">
+
+                    <div class="api-icon">
+                        🎬
+                    </div>
+
+                    <span class="api-method">
+                        GET
+                    </span>
+
+                    <span class="api-online">
+                        ● ONLINE
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    YouTube MP4
+                </h3>
+
+                <p>
+                    Descarga vídeos de YouTube
+                    en formato MP4.
+                </p>
+
+
+                <div class="endpoint-row">
+
+                    <div class="endpoint">
+
+                        <code>
+                            /saitama/api/ytmp4
+                        </code>
+
+                    </div>
+
+
+                    <button
+                        class="test-api-btn"
+                        onclick="testAPI('ytmp4')"
+                    >
+                        ▶ Probar
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- PLAY -->
+
+            <article class="api-card">
+
+                <div class="api-top">
+
+                    <div class="api-icon">
+                        🎧
+                    </div>
+
+                    <span class="api-method">
+                        GET
+                    </span>
+
+                    <span class="api-online">
+                        ● ONLINE
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    Play
+                </h3>
+
+                <p>
+                    Busca una canción y obtiene
+                    información y audio.
+                </p>
+
+
+                <div class="endpoint-row">
+
+                    <div class="endpoint">
+
+                        <code>
+                            /saitama/api/play
+                        </code>
+
+                    </div>
+
+
+                    <button
+                        class="test-api-btn"
+                        onclick="testAPI('play')"
+                    >
+                        ▶ Probar
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- PLAY2 -->
+
+            <article class="api-card">
+
+                <div class="api-top">
+
+                    <div class="api-icon">
+                        📺
+                    </div>
+
+                    <span class="api-method">
+                        GET
+                    </span>
+
+                    <span class="api-online">
+                        ● ONLINE
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    Play 2
+                </h3>
+
+                <p>
+                    Busca un vídeo y prepara
+                    la descarga MP4.
+                </p>
+
+
+                <div class="endpoint-row">
+
+                    <div class="endpoint">
+
+                        <code>
+                            /saitama/api/play2
+                        </code>
+
+                    </div>
+
+
+                    <button
+                        class="test-api-btn"
+                        onclick="testAPI('play2')"
+                    >
+                        ▶ Probar
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- YTSEARCH -->
+
+            <article class="api-card">
+
+                <div class="api-top">
+
+                    <div class="api-icon">
+                        🔎
+                    </div>
+
+                    <span class="api-method">
+                        GET
+                    </span>
+
+                    <span class="api-online">
+                        ● ONLINE
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    YouTube Search
+                </h3>
+
+                <p>
+                    Busca vídeos de YouTube
+                    y devuelve resultados.
+                </p>
+
+
+                <div class="endpoint-row">
+
+                    <div class="endpoint">
+
+                        <code>
+                            /saitama/api/ytsearch
+                        </code>
+
+                    </div>
+
+
+                    <button
+                        class="test-api-btn"
+                        onclick="testAPI('ytsearch')"
+                    >
+                        ▶ Probar
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- TIKTOK -->
+
+            <article class="api-card">
+
+                <div class="api-top">
+
+                    <div class="api-icon">
+                        ♪
+                    </div>
+
+                    <span class="api-method">
+                        GET
+                    </span>
+
+                    <span class="api-online">
+                        ● ONLINE
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    TikTok Downloader
+                </h3>
+
+                <p>
+                    Procesa vídeos e imágenes
+                    de TikTok.
+                </p>
+
+
+                <div class="endpoint-row">
+
+                    <div class="endpoint">
+
+                        <code>
+                            /saitama/api/tiktokdl
+                        </code>
+
+                    </div>
+
+
+                    <button
+                        class="test-api-btn"
+                        onclick="testAPI('tiktokdl')"
+                    >
+                        ▶ Probar
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- TIKTOK SEARCH -->
+
+            <article class="api-card">
+
+                <div class="api-top">
+
+                    <div class="api-icon">
+                        🔥
+                    </div>
+
+                    <span class="api-method">
+                        GET
+                    </span>
+
+                    <span class="api-online">
+                        ● ONLINE
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    TikTok Search
+                </h3>
+
+                <p>
+                    Busca contenido de TikTok
+                    mediante palabras clave.
+                </p>
+
+
+                <div class="endpoint-row">
+
+                    <div class="endpoint">
+
+                        <code>
+                            /saitama/api/tiktoksearch
+                        </code>
+
+                    </div>
+
+
+                    <button
+                        class="test-api-btn"
+                        onclick="testAPI('tiktoksearch')"
+                    >
+                        ▶ Probar
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- FACEBOOK -->
+
+            <article class="api-card">
+
+                <div class="api-top">
+
+                    <div class="api-icon">
+                        f
+                    </div>
+
+                    <span class="api-method">
+                        GET
+                    </span>
+
+                    <span class="api-online">
+                        ● API
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    Facebook Downloader
+                </h3>
+
+                <p>
+                    Descarga contenido de
+                    Facebook mediante URL.
+                </p>
+
+
+                <div class="endpoint-row">
+
+                    <div class="endpoint">
+
+                        <code>
+                            /saitama/api/facebookdl
+                        </code>
+
+                    </div>
+
+
+                    <button
+                        class="test-api-btn"
+                        onclick="testAPI('facebookdl')"
+                    >
+                        ▶ Probar
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- INSTAGRAM -->
+
+            <article class="api-card">
+
+                <div class="api-top">
+
+                    <div class="api-icon">
+                        ◎
+                    </div>
+
+                    <span class="api-method">
+                        GET
+                    </span>
+
+                    <span class="api-online">
+                        ● API
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    Instagram Downloader
+                </h3>
+
+                <p>
+                    Descarga fotos y vídeos
+                    de Instagram.
+                </p>
+
+
+                <div class="endpoint-row">
+
+                    <div class="endpoint">
+
+                        <code>
+                            /saitama/api/instagramdl
+                        </code>
+
+                    </div>
+
+
+                    <button
+                        class="test-api-btn"
+                        onclick="testAPI('instagramdl')"
+                    >
+                        ▶ Probar
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- SPOTIFY -->
+
+            <article class="api-card">
+
+                <div class="api-top">
+
+                    <div class="api-icon">
+                        ♫
+                    </div>
+
+                    <span class="api-method">
+                        GET
+                    </span>
+
+                    <span class="api-online">
+                        ● API
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    Spotify Search
+                </h3>
+
+                <p>
+                    Busca canciones de Spotify
+                    y devuelve información.
+                </p>
+
+
+                <div class="endpoint-row">
+
+                    <div class="endpoint">
+
+                        <code>
+                            /saitama/api/spotifysearch
+                        </code>
+
+                    </div>
+
+
+                    <button
+                        class="test-api-btn"
+                        onclick="testAPI('spotifysearch')"
+                    >
+                        ▶ Probar
+                    </button>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+                  <!-- =================================================
+             API KEY
+        ================================================= -->
+
+        <div
+            class="key-panel"
+            id="apikey"
+        >
+
+            <div class="key-header">
+
+                <div>
+
+                    <h3>
+                        🔐 API Key
+                    </h3>
+
+                    <span>
+                        Utiliza tu clave para ejecutar los endpoints protegidos.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="key-row">
+
+                <input
+                    id="apikey"
+                    type="password"
+                    placeholder="Introduce tu API Key"
+                    autocomplete="off"
+                >
+
+
+                <button
+                    class="key-btn"
+                    onclick="saveApiKey()"
+                >
+                    Guardar
+                </button>
+
+
+                <button
+                    class="key-btn"
+                    onclick="copyApiKey()"
+                >
+                    Copiar
+                </button>
+
+            </div>
+
+
+            <div class="key-note">
+
+                La clave se guarda solamente en este navegador mediante localStorage.
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     TESTER
+========================================================= -->
+
+<section id="tester">
+
+    <div class="container">
+
+        <div class="tester">
+
+            <div class="tester-head">
+
+                <div>
+
+                    <h2>
+                        API Tester
+                    </h2>
+
+                    <span>
+                        Prueba tus endpoints directamente desde Saitama API.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="tester-grid">
+
+
+                <div class="field">
+
+                    <label>
+                        Endpoint
+                    </label>
+
+                    <select id="endpoint">
+
+                        <option value="/saitama/api/ytmp3">
+                            YouTube MP3
+                        </option>
+
+                        <option value="/saitama/api/ytmp4">
+                            YouTube MP4
+                        </option>
+
+                        <option value="/saitama/api/play">
+                            Play
+                        </option>
+
+                        <option value="/saitama/api/play2">
+                            Play 2
+                        </option>
+
+                        <option value="/saitama/api/ytsearch">
+                            YouTube Search
+                        </option>
+
+                        <option value="/saitama/api/tiktokdl">
+                            TikTok Downloader
+                        </option>
+
+                        <option value="/saitama/api/tiktoksearch">
+                            TikTok Search
+                        </option>
+
+                        <option value="/saitama/api/facebookdl">
+                            Facebook Downloader
+                        </option>
+
+                        <option value="/saitama/api/instagramdl">
+                            Instagram Downloader
+                        </option>
+
+                        <option value="/saitama/api/spotifysearch">
+                            Spotify Search
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Parámetro
+                    </label>
+
+                    <input
+                        id="parameter"
+                        type="text"
+                        placeholder="Introduce un valor..."
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="tester-buttons">
+
+                <button
+                    class="run-btn"
+                    onclick="sendRequest()"
+                >
+                    ⚡ Ejecutar petición
+                </button>
+
+
+                <button
+                    class="clear-btn"
+                    onclick="clearResponse()"
+                >
+                    × Limpiar
+                </button>
+
+            </div>
+
+
+            <div class="url-preview">
+
+                <div class="url-preview-title">
+                    URL generada
+                </div>
+
+                <code id="urlPreview">
+                    Esperando parámetros...
+                </code>
+
+            </div>
+
+
+            <div class="response">
+
+                <div class="response-head">
+
+                    <span>
+                        JSON Response
+                    </span>
+
+                    <button
+                        class="clear-btn"
+                        onclick="copyResponse()"
+                    >
+                        Copiar
+                    </button>
+
+                </div>
+
+
+                <pre id="response">{
+    "status": true,
+    "message": "Saitama API Tester listo."
+}</pre>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    <div class="container">
+
+        <div class="footer-grid">
+
+
+            <div>
+
+                <div class="footer-brand">
+                    Saitama API
+                </div>
+
+                <p>
+                    APIs rápidas, modernas y sencillas
+                    para tus proyectos.
+                </p>
+
+                <p style="margin-top:8px;">
+                    Creado por SaiDev145.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                                <div class="footer-title">
+                    Navegación
+                </div>
+
+                <div class="footer-links">
+
+                    <a href="#inicio">
+                        Inicio
+                    </a>
+
+                    <a href="#apis">
+                        Endpoints
+                    </a>
+
+                    <a href="#tester">
+                        API Tester
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <div class="footer-title">
+                    Saitama API
+                </div>
+
+                <div class="footer-links">
+
+                    <a href="#apikey">
+                        API Key
+                    </a>
+
+                    <a href="#apis">
+                        APIs
+                    </a>
+
+                    <a href="/saitama/api/stats">
+                        Estadísticas JSON
+                    </a>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="copyright">
+
+            © 2026 Saitama API · Todos los derechos reservados.
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- =========================================================
+     MUSIC
+========================================================= -->
+
+<audio
+    id="backgroundMusic"
+    loop
+    preload="auto"
+>
+    <!--
+        IMPORTANTE:
+
+        Aquí NO pongas el enlace de YouTube.
+
+        YouTube:
+        https://youtu.be/Kqmzbpa7_6w
+
+        necesita convertirse en una URL directa de audio
+        .mp3/.ogg para utilizarse con <audio>.
+
+        Ejemplo:
+
+        <source
+            src="TU_URL_DIRECTA_MP3"
+            type="audio/mpeg"
+        >
+    -->
+</audio>
+
+
+<button
+    class="music-control"
+    id="musicButton"
+    onclick="toggleMusic()"
+    title="Música"
+>
+    ♪
+</button>
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div
+    class="toast"
+    id="toast"
+>
+    Listo
+</div>
+
+
+<script>
+
+    /* =====================================================
+       CONFIGURACIÓN
+    ===================================================== */
+
+    const API_CONFIG = {
+
+        ytmp3: {
+            endpoint: "/saitama/api/ytmp3",
+            parameter: "url",
+            placeholder:
+                "https://youtube.com/watch?v=..."
+        },
+
+        ytmp4: {
+            endpoint: "/saitama/api/ytmp4",
+            parameter: "url",
+            placeholder:
+                "https://youtube.com/watch?v=..."
+        },
+
+        play: {
+            endpoint: "/saitama/api/play",
+            parameter: "q",
+            placeholder:
+                "Nombre de la canción"
+        },
+
+        play2: {
+            endpoint: "/saitama/api/play2",
+            parameter: "q",
+            placeholder:
+                "Nombre del video"
+        },
+
+        ytsearch: {
+            endpoint: "/saitama/api/ytsearch",
+            parameter: "q",
+            placeholder:
+                "Buscar en YouTube"
+        },
+
+        tiktokdl: {
+            endpoint: "/saitama/api/tiktokdl",
+            parameter: "url",
+            placeholder:
+                "https://www.tiktok.com/@usuario/video/..."
+        },
+
+        tiktoksearch: {
+            endpoint: "/saitama/api/tiktoksearch",
+            parameter: "q",
+            placeholder:
+                "Buscar en TikTok"
+        },
+
+        facebookdl: {
+            endpoint: "/saitama/api/facebookdl",
+            parameter: "url",
+            placeholder:
+                "https://www.facebook.com/..."
+        },
+
+        instagramdl: {
+            endpoint: "/saitama/api/instagramdl",
+            parameter: "url",
+            placeholder:
+                "https://www.instagram.com/..."
+        },
+
+        spotifysearch: {
+            endpoint: "/saitama/api/spotifysearch",
+            parameter: "q",
+            placeholder:
+                "Nombre de la canción"
+        }
+
+    };
+
+
+    /* =====================================================
+       ELEMENTOS
+    ===================================================== */
+
+    const endpointInput =
+        document.getElementById("endpoint");
+
+    const parameterInput =
+        document.getElementById("parameter");
+
+    const apiKeyInput =
+        document.getElementById("apikey");
+
+    const responseBox =
+        document.getElementById("response");
+
+    const urlPreview =
+        document.getElementById("urlPreview");
+
+
+    /* =====================================================
+       API KEY
+    ===================================================== */
+
+    function saveApiKey() {
+
+        const key =
+            apiKeyInput.value.trim();
+
+        if (!key) {
+
+            showToast(
+                "Introduce una API Key."
+            );
+
+            return;
+
+        }
+
+        localStorage.setItem(
+            "saitama_api_key",
+            key
+        );
+
+        showToast(
+            "API Key guardada."
+        );
+
+    }
+
+
+    function loadApiKey() {
+
+        const key =
+            localStorage.getItem(
+                "saitama_api_key"
+            );
+
+        if (key) {
+
+            apiKeyInput.value = key;
+
+        }
+
+    }
+
+
+    async function copyApiKey() {
+
+        const key =
+            apiKeyInput.value.trim();
+
+        if (!key) {
+
+            showToast(
+                "No hay API Key para copiar."
+            );
+
+            return;
+
+        }
+
+        await navigator.clipboard.writeText(key);
+
+        showToast(
+            "API Key copiada."
+        );
+
+    }
+
+
+    /* =====================================================
+       PROBAR API DESDE CARD
+    ===================================================== */
+
+    function testAPI(name) {
+
+        const api =
+            API_CONFIG[name];
+
+        if (!api) {
+
+            showResponse({
+                status: false,
+                error: "API no encontrada"
+            });
+
+            return;
+
+        }
+
+
+        endpointInput.value =
+            api.endpoint;
+
+
+        parameterInput.value = "";
+
+
+        parameterInput.placeholder =
+            api.placeholder;
+
+
+        parameterInput.dataset.name =
+            api.parameter;
+
+
+        updatePreview();
+
+
+        document
+            .getElementById("tester")
+            .scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+
+        setTimeout(() => {
+
+            parameterInput.focus();
+
+        }, 500);
+
+    }
+
+
+    /* =====================================================
+       ENDPOINT CAMBIADO
+    ===================================================== */
+
+    endpointInput.addEventListener(
+        "change",
+        () => {
+
+            const endpoint =
+                endpointInput.value;
+
+            const config =
+                Object.values(API_CONFIG)
+                    .find(
+                        api =>
+                            api.endpoint === endpoint
+                    );
+
+
+            if (config) {
+
+                parameterInput.dataset.name =
+                    config.parameter;
+
+                parameterInput.placeholder =
+                    config.placeholder;
+
+            }
+
+
+            updatePreview();
+
+        }
+    );
+
+
+    /* =====================================================
+       URL
+    ===================================================== */
+
+    function buildURL() {
+
+        const endpoint =
+            endpointInput.value.trim();
+
+        const parameter =
+            parameterInput.value.trim();
+
+        const key =
+            apiKeyInput.value.trim();
+
+
+        if (!endpoint) {
+
+            return "";
+
+        }
+
+
+        const parameterName =
+            parameterInput.dataset.name ||
+            "q";
+
+
+        const params =
+            new URLSearchParams();
+
+
+        if (parameter) {
+
+            params.set(
+                parameterName,
+                parameter
+            );
+
+        }
+
+
+        if (key) {
+
+            params.set(
+                "apikey",
+                key
+            );
+
+        }
+
+
+        return (
+            window.location.origin +
+            endpoint +
+            "?" +
+            params.toString()
+        );
+
+    }
+
+
+    function updatePreview() {
+
+        const url =
+            buildURL();
+
+
+        urlPreview.textContent =
+            url ||
+            "Esperando parámetros...";
+
+    }
+
+
+    parameterInput.addEventListener(
+        "input",
+        updatePreview
+    );
+
+
+    apiKeyInput.addEventListener(
+        "input",
+        updatePreview
+    );
+
+
+    /* =====================================================
+       EJECUTAR REQUEST
+    ===================================================== */
+
+    async function sendRequest() {
+
+        const endpoint =
+            endpointInput.value.trim();
+
+        const parameter =
+            parameterInput.value.trim();
+
+        const apiKey =
+            apiKeyInput.value.trim();
+
+
+        if (!endpoint) {
+
+            showResponse({
+                status: false,
+                error: "Selecciona un endpoint."
+            });
+
+            return;
+
+        }
+
+
+        if (!parameter) {
+
+            showResponse({
+                status: false,
+                error: "Introduce un parámetro."
+            });
+
+            parameterInput.focus();
+
+            return;
+
+        }
+
+
+        const parameterName =
+            parameterInput.dataset.name ||
+            "q";
+
+
+        const params =
+            new URLSearchParams();
+
+
+        params.set(
+            parameterName,
+            parameter
+        );
+
+
+        if (apiKey) {
+  params.set(
+                "apikey",
+                apiKey
+            );
+
+        }
+
+
+        const url =
+            endpoint +
+            "?" +
+            params.toString();
+
+
+        urlPreview.textContent =
+            window.location.origin +
+            url;
+
+
+        responseBox.textContent =
+            "Ejecutando petición...";
+
+
+        try {
+
+            const start =
+                performance.now();
+
+
+            const response =
+                await fetch(url);
+
+
+            const elapsed =
+                Math.round(
+                    performance.now() - start
+                );
+
+
+            const contentType =
+                response.headers.get(
+                    "content-type"
+                ) || "";
+
+
+            let data;
+
+
+            if (
+                contentType.includes(
+                    "application/json"
+                )
+            ) {
+
+                data =
+                    await response.json();
+
+            } else {
+
+                const text =
+                    await response.text();
+
+
+                data = {
+
+                    status:
+                        response.ok,
+
+                    response:
+                        text
+
+                };
+
+            }
+
+
+            showResponse({
+
+                http_code:
+                    response.status,
+
+                response_time:
+                    elapsed + " ms",
+
+                data
+
+            });
+
+
+        } catch (error) {
+
+            showResponse({
+
+                status: false,
+
+                error:
+                    "No se pudo conectar con la API.",
+
+                detail:
+                    error.message
+
+            });
+
+        }
+
+    }
+
+
+    /* =====================================================
+       MOSTRAR RESPONSE
+    ===================================================== */
+
+    function showResponse(data) {
+
+        try {
+
+            responseBox.textContent =
+                JSON.stringify(
+                    data,
+                    null,
+                    2
+                );
+
+        } catch {
+
+            responseBox.textContent =
+                String(data);
+
+        }
+
+    }
+
+
+    function clearResponse() {
+
+        responseBox.textContent =
+`{
+    "status": true,
+    "message": "Saitama API Tester listo."
+}`;
+
+        urlPreview.textContent =
+            "Esperando parámetros...";
+
+    }
+
+
+    async function copyResponse() {
+
+        const text =
+            responseBox.textContent;
+
+
+        await navigator.clipboard.writeText(
+            text
+        );
+
+
+        showToast(
+            "Respuesta copiada."
+        );
+
+    }
+
+
+    /* =====================================================
+       ENTER
+    ===================================================== */
+
+    parameterInput.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                sendRequest();
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       STATS
+    ===================================================== */
+
+    async function loadStats() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/saitama/api/stats"
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Stats unavailable"
+                );
+
+            }
+
+
+            const result =
+                await response.json();
+
+
+            if (
+                result &&
+                result.data
+            ) {
+
+                const stats =
+                    result.data;
+
+
+                document
+                    .getElementById(
+                        "totalRequests"
+                    )
+                    .textContent =
+                    formatNumber(
+                        stats.total || 0
+                    );
+
+
+                document
+                    .getElementById(
+                        "todayRequests"
+                    )
+                    .textContent =
+                    formatNumber(
+                        stats.today || 0
+                    );
+
+
+                if (
+                    stats.apis
+                ) {
+
+                    document
+                        .getElementById(
+                            "endpointCount"
+                        )
+                        .textContent =
+                        "10";
+
+                }
+
+            }
+
+        } catch {
+
+            console.log(
+                "No se pudieron cargar las estadísticas."
+            );
+
+        }
+
+    }
+
+
+    function formatNumber(number) {
+
+        return new Intl.NumberFormat(
+            "es-PE"
+        ).format(number);
+
+    }
+
+
+    /* =====================================================
+       TOAST
+    ===================================================== */
+
+    function showToast(message) {
+
+        const toast =
+            document.getElementById(
+                "toast"
+            );
+
+
+        toast.textContent =
+            message;
+
+
+        toast.classList.add(
+            "show"
+        );
+
+
+        setTimeout(() => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        }, 2200);
+
+    }
+
+
+    /* =====================================================
+       MÚSICA
+    ===================================================== */
+
+    const music =
+        document.getElementById(
+            "backgroundMusic"
+        );
+
+
+    const musicButton =
+        document.getElementById(
+            "musicButton"
+        );
+
+
+    async function toggleMusic() {
+
+        try {
+
+            if (
+                music.paused
+            ) {
+
+                await music.play();
+
+                musicButton.classList.add(
+                    "playing"
+                );
+
+                musicButton.textContent =
+                    "Ⅱ";
+
+            } else {
+
+                music.pause();
+
+                musicButton.classList.remove(
+                    "playing"
+                );
+
+                musicButton.textContent =
+                    "♪";
+
+            }
+
+        } catch {
+
+            showToast(
+                "Agrega una URL directa MP3 para la música."
+            );
+
+        }
+
+    }
+
+
+    /*
+       Los navegadores suelen bloquear
+       el autoplay con sonido.
+
+       Por eso intentamos reproducirla
+       automáticamente y dejamos el botón
+       para activarla manualmente.
+    */
+
+    window.addEventListener(
+        "load",
+        async () => {
+
+            loadApiKey();
+
+            loadStats();
+
+            updatePreview();
+
+
+            try {
+
+                await music.play();
+
+                musicButton.classList.add(
+                    "playing"
+                );
+
+                musicButton.textContent =
+                    "Ⅱ";
+
+            } catch {
+
+                /*
+                   Autoplay bloqueado.
+                   El usuario puede tocar ♪.
+                */
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       ACTUALIZAR STATS
+    ===================================================== */
+
+    setInterval(
+        loadStats,
+        30000
+    );
+
+</script>
+
+
+</body>
+
+</html>
+
+                      
