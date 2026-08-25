@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#061b3d"
+    >
+
+    <meta
+        name="description"
+        content="Saitama API - APIs rápidas, modernas y sencillas."
+    >
+
+    <title>Saitama API</title>
+
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<!-- =========================================
+     BACKGROUND
+========================================= -->
+
+<div class="background">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div class="glow glow-3"></div>
+
+    <div class="grid-background"></div>
+
+    <div class="particles">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>
+
+
+<!-- =========================================
+     YOUTUBE MUSIC
+========================================= -->
+
+<div id="musicPlayer" class="music-player">
+
+    <iframe
+        id="youtubePlayer"
+        src="https://www.youtube.com/embed/Kqmzbpa7_6w?autoplay=1&mute=1&loop=1&playlist=Kqmzbpa7_6w"
+        title="Saitama API Music"
+        allow="autoplay; encrypted-media"
+        allowfullscreen>
+    </iframe>
+
+    <button
+        id="musicButton"
+        class="music-button"
+        type="button"
+        onclick="toggleMusic()"
+    >
+        ♫ Música
+    </button>
+
+</div>
+
+
+<!-- =========================================
+     NAVBAR
+========================================= -->
+
+<header class="navbar">
+
+    <div class="container nav-inner">
+
+        <a href="#" class="brand">
+
+            <div class="brand-image">
+                <img
+                    src="https://files.catbox.moe/puoaqb.jpg"
+                    alt="Saitama API"
+                >
+            </div>
+
+            <div class="brand-text">
+                <strong>Saitama</strong>
+                <span>API</span>
+            </div>
+
+        </a>
+
+
+        <nav class="nav-links">
+
+            <a href="#home">Inicio</a>
+
+            <a href="#apis">APIs</a>
+
+            <a href="#tester">Tester</a>
+
+            <a href="#apikey">API Key</a>
+
+        </nav>
+
+
+        <div class="nav-status">
+
+            <span class="status-dot"></span>
+
+            <span>ONLINE</span>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================
+     HERO
+========================================= -->
+
+<main id="home">
+
+<section class="hero">
+
+    <div class="container hero-grid">
+
+        <div class="hero-content">
+
+            <div class="hero-badge">
+
+                <span class="pulse"></span>
+
+                SAITAMA API
+
+                <span class="badge-line"></span>
+
+                ONLINE
+
+            </div>
+
+
+            <h1>
+                Saitama
+                <span>API</span>
+            </h1>
+
+
+            <h2>
+                APIs rápidas para tus proyectos.
+            </h2>
+
+
+            <p class="hero-description">
+
+                Una colección moderna de APIs para buscar,
+                descargar y procesar contenido de diferentes
+                plataformas desde un solo lugar.
+
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a
+                    href="#apis"
+                    class="btn btn-primary"
+                >
+                    <span>Explorar APIs</span>
+                    <b>→</b>
+                </a>
+
+
+                <a
+                    href="#tester"
+                    class="btn btn-secondary"
+                >
+                    Probar API
+                </a>
+
+            </div>
+
+
+            <div class="hero-mini-info">
+
+                <div>
+                    <span class="mini-icon">⚡</span>
+                    <span>Rápida</span>
+                </div>
+
+                <div>
+                    <span class="mini-icon">◈</span>
+                    <span>JSON</span>
+                </div>
+
+                <div>
+                    <span class="mini-icon">∞</span>
+                    <span>Gratis</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SAITAMA -->
+
+        <div class="hero-visual">
+
+            <div class="visual-ring ring-1"></div>
+            <div class="visual-ring ring-2"></div>
+
+            <div class="image-glow"></div>
+
+            <div class="saitama-card">
+
+                <div class="card-top-line"></div>
+
+                <img
+                    src="https://files.catbox.moe/puoaqb.jpg"
+                    alt="Saitama"
+                >
+
+                <div class="saitama-overlay">
+
+                    <div>
+                        <small>POWERED BY</small>
+                        <strong>SaiDev145</strong>
+                    </div>
+
+                    <div class="api-version">
+                        v1.0
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     STATS
+========================================= -->
+
+<section class="stats-section">
+
+    <div class="container">
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon blue">
+                    ⚡
+                </div>
+
+                <div class="stat-info">
+
+                    <span>Total Requests</span>
+
+                    <strong id="totalRequests">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon cyan">
+                    ◉
+                </div>
+
+                <div class="stat-info">
+
+                    <span>Requests Today</span>
+
+                    <strong id="todayRequests">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon purple">
+                    ◇
+                </div>
+
+                <div class="stat-info">
+
+                    <span>Endpoints</span>
+
+                    <strong id="apiCount">
+                        10
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon green">
+                    ✓
+                </div>
+
+                <div class="stat-info">
+
+                    <span>System Status</span>
+
+                    <strong class="online-text">
+                        ONLINE
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     APIS
+========================================= -->
+
+<section id="apis" class="section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="section-tag">
+                    API COLLECTION
+                </span>
+
+                <h2>
+                    Explora nuestras APIs
+                </h2>
+
+                <p>
+                    Selecciona una API y pruébala directamente
+                    desde el tester.
+                </p>
+
+            </div>
+
+            <div class="endpoint-count">
+                <span></span>
+                <b id="endpointCount">10</b>
+                endpoints
+            </div>
+
+        </div>
+
+
+        <div id="apiGrid" class="api-grid"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     API KEY
+========================================= -->
+
+<section id="apikey" class="section key-section">
+
+    <div class="container">
+
+        <div class="key-card">
+
+            <div class="key-decoration"></div>
+
+            <div class="key-content">
+
+                <div class="key-icon">
+                    🔐
+                </div>
+
+                <div class="key-text">
+
+                    <span class="section-tag">
+                        AUTHENTICATION
+                    </span>
+
+                    <h2>
+                        Tu API Key
+                    </h2>
+
+                    <p>
+                        Utiliza tu clave para realizar
+                        peticiones protegidas a Saitama API.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="key-input-wrapper">
+
+                <input
+                    id="apikey"
+                    type="password"
+                    placeholder="Introduce tu API Key"
+                    autocomplete="off"
+                >
+
+                <button
+                    id="showKeyButton"
+                    class="key-action"
+                    type="button"
+                    onclick="toggleApiKey()"
+                >
+                    Mostrar
+                </button>
+
+                <button
+                    class="key-copy"
+                    type="button"
+                    onclick="copyApiKey()"
+                >
+                    Copiar
+                </button>
+
+            </div>
+
+
+            <div class="key-warning">
+
+                <span>●</span>
+
+                Tu API Key se utiliza únicamente
+                para realizar las peticiones del tester.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     TESTER
+========================================= -->
+
+<section id="tester" class="section tester-section">
+
+    <div class="container">
+
+        <div class="tester-card">
+
+            <div class="tester-header">
+
+                <div>
+
+                    <span class="section-tag">
+                        API TESTER
+                    </span>
+
+                    <h2>
+                        Prueba cualquier endpoint
+                    </h2>
+
+                    <p>
+                        Selecciona una API, introduce el parámetro
+                        y ejecuta la petición.
+                    </p>
+
+                </div>
+
+
+                <div class="tester-online">
+
+                    <span></span>
+
+                    API ONLINE
+
+                </div>
+
+            </div>
+
+
+            <div class="tester-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Endpoint
+                    </label>
+
+                    <select id="endpoint"></select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Parámetro
+                    </label>
+
+                    <input
+                        id="parameter"
+                        type="text"
+                        placeholder="Selecciona una API..."
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="endpoint-preview">
+
+                <span>
+                    REQUEST
+                </span>
+
+                <code id="requestPreview">
+                    Selecciona una API para comenzar...
+                </code>
+
+                <button
+                    type="button"
+                    onclick="copyRequestUrl()"
+                >
+                    Copiar
+                </button>
+
+            </div>
+
+
+            <div class="tester-actions">
+
+                <button
+                    id="sendButton"
+                    class="btn btn-primary test-main"
+                    type="button"
+                    onclick="sendRequest()"
+                >
+                    <span>Ejecutar petición</span>
+                    <b>→</b>
+                </button>
+
+                <button
+                    class="btn btn-secondary"
+                    type="button"
+                    onclick="clearTester()"
+                >
+                    Limpiar
+                </button>
+
+            </div>
+
+
+            <div class="response-header">
+
+                <div>
+
+                    <span class="response-title">
+                        RESPONSE
+                    </span>
+
+                    <span
+                        id="responseStatus"
+                        class="response-status"
+                    >
+                        Esperando petición
+                    </span>
+
+                </div>
+
+                <button
+                    type="button"
+                    onclick="copyResponse()"
+                >
+                    Copiar JSON
+                </button>
+
+            </div>
+
+
+            <div
+                id="response"
+                class="response-box"
+            >
+<pre>{
+  "status": true,
+  "message": "Saitama API ready"
+}</pre>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     DOCUMENTATION
+========================================= -->
+
+<section class="section docs-section">
+
+    <div class="container">
+
+        <div class="section-heading centered">
+
+            <span class="section-tag">
+                SIMPLE & FAST
+            </span>
+
+            <h2>
+                Fácil de utilizar
+            </h2>
+
+            <p>
+                Solo necesitas tu endpoint,
+                parámetro y API Key.
+            </p>
+
+        </div>
+
+
+        <div class="steps-grid">
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    01
+                </div>
+
+                <h3>
+                    Selecciona
+                </h3>
+
+                <p>
+                    Elige la API que quieres utilizar.
+                </p>
+
+            </div>
+
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    02
+                </div>
+
+                <h3>
+                    Introduce
+                </h3>
+
+                <p>
+                    Escribe la URL o búsqueda
+                    correspondiente.
+                </p>
+
+            </div>
+
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    03
+                </div>
+
+                <h3>
+                    Ejecuta
+                </h3>
+
+                <p>
+                    Pulsa ejecutar y recibe
+                    la respuesta JSON.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =========================================
+     FOOTER
+========================================= -->
+
+<footer>
+
+    <div class="container">
+
+        <div class="footer-brand">
+
+            <img
+                src="https://files.catbox.moe/puoaqb.jpg"
+                alt="Saitama"
+            >
+
+            <div>
+
+                <strong>
+                    Saitama API
+                </strong>
+
+                <span>
+                    Modern API Service
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <p>
+            © 2026 Saitama API ·
+            Powered by <strong>SaiDev145</strong>
+        </p>
+
+        <div class="footer-status">
+
+            <span></span>
+
+            All systems operational
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- =========================================
+     TOAST
+========================================= -->
+
+<div
+    id="toast"
+    class="toast"
+>
+    Copiado correctamente
+</div>
+
+
+<script src="/script.js"></script>
+
+</body>
+  </html>
