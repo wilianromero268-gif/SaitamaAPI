@@ -299,6 +299,7 @@ footer{text-align:center;color:#7187a4;font-size:10px;padding:30px 0;margin-top:
 <script>
 
 const API_KEY="Saitama_saidev146";
+ const API_BASE = window.location.origin;
 
 const API_CONFIG={
  ytmp3:{
@@ -436,11 +437,11 @@ async function testApi(key){
 
  try{
 
-  const url=
-   `${api.endpoint}?${api.parameter}=`+
-   encodeURIComponent(value)+
-   `&apikey=${encodeURIComponent(API_KEY)}`;
-
+  const url =
+    `${API_BASE}${api.endpoint}?${api.parameter}=` +
+    encodeURIComponent(value) +
+    `&apikey=${encodeURIComponent(API_KEY)}`;
+  
   const response=await fetch(url);
   const text=await response.text();
 
