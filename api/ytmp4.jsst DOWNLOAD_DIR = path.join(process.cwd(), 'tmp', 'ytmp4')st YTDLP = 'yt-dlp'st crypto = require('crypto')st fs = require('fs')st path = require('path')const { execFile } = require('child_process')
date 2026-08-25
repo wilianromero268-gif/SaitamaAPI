@@ -1,0 +1,235 @@
+nc(DOWNLOAD_DIR)) {
+    fs.mkdirSync(DOWNLOAD_DIR, { recursive: true })
+}
+
+function runYtDlp(args) {
+    return new Promise((resolve, reject) => {
+        execFile(
+            YTDLP,
+            args,
+            {
+                maxBuffer: 100 * 1024 * 1024,
+                timeout: 180000
+            },
+            (error, stdout, stderr) => {
+                if (error) {
+                    return reject(
+                        new Error(
+                            stderr?.trim() ||
+                            error.message ||
+                            'yt-dlp error'
+                        )
+                    )
+                }
+
+                resolve(stdout.trim())
+            }
+        )
+    })
+}
+
+async function getInfo(url) {
+    const output = await runYtDlp([
+        '--dump-single-json',
+        '--skip-download',
+        '--no-warnings',
+        '--no-playlist',
+        url
+    ])
+
+    return JSON.parse(output)
+}
+
+function formatDuration(seconds) {
+    if (!seconds) return null
+
+    seconds = Math.floor(Number(seconds))
+
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60)
+    const secs = seconds % 60
+
+    if (hours > 0) {
+        return `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
+    }
+
+    return `${minutes}:${String(secs).padStart(2, '0')}`
+}
+
+function cleanName(name) {
+    return String(name || 'video')
+        .replace(/[<>:"/\\|?*\x00-\x1F]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 100)
+}
+
+async function downloadVideo(url, output) {
+    await runYtDlp([
+        '--no-warnings',
+        '--no-playlist',
+
+        // MP4 compatible
+        '-f',
+        'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/b',
+
+        // Si son streams separados, los une
+        '--merge-output-format',
+        'mp4',
+
+        '-o',
+        output,
+
+        url
+    ])
+}
+
+async function ytmp4(req, res) {
+
+    const url = req.query.url
+
+    if (!url) {
+        return res.status(400).json({
+            status: false,
+            code: 400,
+            error: 'Bad Request',
+            message: 'El parámetro url es obligatorio'
+        })
+    }
+
+    const validUrl =
+        url.includes('youtube.com') ||
+        url.includes('youtu.be')
+
+    if (!validUrl) {
+        return res.status(400).json({
+            status: false,
+            code: 400,
+            error: 'Invalid URL',
+            message: 'La URL debe ser de YouTube'
+        })
+    }
+
+    let outputPath = null
+
+    try {
+
+        const info = await getInfo(url)
+
+        const id =
+            info.id ||
+            crypto.randomBytes(8).toString('hex')
+
+        const title =
+            cleanName(info.title) ||
+            'video'
+
+        const filename = `${id}.mp4`
+
+        outputPath = path.join(DOWNLOAD_DIR, filename)
+
+        // Descargar solamente si todavía no existe
+        if (!fs.existsSync(outputPath)) {
+            await downloadVideo(url, outputPath)
+        }
+
+        if (!fs.existsSync(outputPath)) {
+            throw new Error('yt-dlp no creó el archivo MP4')
+        }
+
+        const baseUrl =
+            `${req.protocol}://${req.get('host')}`
+
+        const videoUrl =
+            `${baseUrl}/saitama/api/ytmp4/file/${encodeURIComponent(filename)}`
+
+        return res.json({
+
+            status: true,
+
+            code: 200,
+
+            creator: 'SaiDev145',
+
+            type: 'video',
+
+            id,
+
+            title,
+
+            description:
+                info.description ||
+                null,
+
+            video: videoUrl,
+
+            thumbnail:
+                info.thumbnail ||
+                null,
+
+            duration:
+                formatDuration(info.duration),
+
+            duration_seconds:
+                Number(info.duration) ||
+                0,
+
+            views:
+                info.view_count ||
+                0,
+
+            likes:
+                info.like_count ||
+                0,
+
+            comments:
+                info.comment_count ||
+                0,
+
+            channel:
+                info.channel ||
+                info.uploader ||
+                null,
+
+            channel_url:
+                info.channel_url ||
+                info.uploader_url ||
+                null,
+
+            url:
+                info.webpage_url ||
+                url,
+
+            filename,
+
+            format: 'mp4'
+
+        })
+
+    } catch (error) {
+
+        if (outputPath && fs.existsSync(outputPath)) {
+            try {
+                fs.unlinkSync(outputPath)
+            } catch {}
+        }
+
+        return res.status(500).json({
+
+            status: false,
+
+            code: 500,
+
+            error: 'YouTube Extraction Error',
+
+            message:
+                'No se pudo descargar el video de YouTube',
+
+            detail:
+                error.message
+
+        })
+    }
+}
+
+module.exports = ytmp4

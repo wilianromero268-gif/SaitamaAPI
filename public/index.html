@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Saitama API — APIs rápidas, gratuitas y fáciles de usar."
+    >
+
+    <meta
+        name="theme-color"
+        content="#080808"
+    >
+
+    <title>Saitama API</title>
+
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <header class="hero">
+
+        <div class="logo-container">
+            <img
+                src="/assets/saitama.png"
+                alt="Saitama API"
+                class="logo"
+            >
+        </div>
+
+        <h1>Saitama API</h1>
+
+        <div class="welcome">
+            Welcome User 👋
+        </div>
+
+        <p class="description">
+            APIs rápidas, simples y gratuitas para descargar,
+            buscar y procesar contenido desde diferentes plataformas.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a
+                href="#apis"
+                class="btn primary"
+            >
+                Explorar APIs
+            </a>
+
+            <a
+                href="#tester"
+                class="btn secondary"
+            >
+                Probar API
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         STATS
+    ========================== -->
+
+    <section class="stats">
+
+        <div class="stat-card">
+            <strong id="apiCount">10+</strong>
+            <span>APIs disponibles</span>
+        </div>
+
+        <div class="stat-card">
+            <strong class="status">
+                ● ONLINE
+            </strong>
+            <span>Estado del servicio</span>
+        </div>
+
+        <div class="stat-card">
+            <strong>FREE</strong>
+            <span>Acceso público</span>
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         APIS
+    ========================== -->
+
+    <main>
+
+        <section
+            class="section"
+            id="apis"
+        >
+
+            <div class="section-title">
+
+                <h2>APIs disponibles</h2>
+
+                <p>
+                    Explora nuestros endpoints y prueba cada API.
+                </p>
+
+            </div>
+
+
+            <div
+                class="api-grid"
+                id="apiGrid"
+            >
+
+                <!-- YouTube MP3 -->
+
+                <article class="api-card">
+
+                    <div class="api-top">
+
+                        <div>
+
+                            <span class="method-badge">
+                                GET
+                            </span>
+
+                            <h3>
+                                YouTube MP3
+                            </h3>
+
+                        </div>
+
+                        <span class="api-online">
+                            ●
+                        </span>
+
+                    </div>
+
+                    <p>
+                        Descarga audio MP3 desde un enlace
+                        de YouTube.
+                    </p>
+
+                    <code class="api-endpoint">
+                        /api/ytmp3?url=
+                    </code>
+
+                    <button
+                        class="try-button"
+                        onclick="testAPI('ytmp3')"
+                    >
+                        Probar API
+                    </button>
+
+                </article>
+
+
+                <!-- YouTube MP4 -->
+
+                <article class="api-card">
+
+                    <div class="api-top">
+
+                        <div>
+
+                            <span class="method-badge">
+                                GET
+                            </span>
+
+                            <h3>
+                                YouTube MP4
+                            </h3>
+
+                        </div>
+
+                        <span class="api-online">
+                            ●
+                        </span>
+
+                    </div>
+
+                    <p>
+                        Descarga videos de YouTube
+                        en formato MP4.
+                    </p>
+
+                    <code class="api-endpoint">
+                        /api/ytmp4?url=
+                    </code>
+
+                    <button
+                        class="try-button"
+                        onclick="testAPI('ytmp4')"
+                    >
+                        Probar API
+                    </button>
+
+                </article>
+
+
+                <!-- PLAY -->
+
+                <article class="api-card">
+
+                    <div class="api-top">
+
+                        <div>
+
+                            <span class="method-badge">
+                                GET
+                            </span>
+
+                            <h3>
+                                Play
+                            </h3>
+
+                        </div>
+
+                        <span class="api-online">
+                            ●
+                        </span>
+
+                    </div>
+
+                    <p>
+                        Busca una canción y obtiene
+                        el audio para reproducir o descargar.
+                    </p>
+
+                    <code class="api-endpoint">
+                        /api/play?q=
+                    </code>
+
+                    <button
+                        class="try-button"
+                        onclick="testAPI('play')"
+                    >
+                        Probar API
+                    </button>
+
+                </article>
+
+
+                <!-- PLAY 2 -->
+
+                <article class="api-card">
+
+                    <div class="api-top">
+
+                        <div>
+
+                            <span class="method-badge">
+                                GET
+                            </span>
+
+                            <h3>
+                                Play 2
+                            </h3>
+
+                        </div>
+
+                        <span class="api-online">
+                            ●
+                        </span>
+
+                    </div>
+
+                    <p>
+                        Busca videos y obtiene
+                        el contenido en formato MP4.
+                    </p>
+
+                    <code class="api-endpoint">
+                        /api/play2?q=
+                    </code>
+
+                    <button
+                        class="try-button"
+                        onclick="testAPI('play2')"
+                    >
+                        Probar API
+                    </button>
+
+                </article>
+
+
+                <!-- YT SEARCH -->
+
+                <article class="api-card">
+
+                    <div class="api-top">
+
+                        <div>
+
+                            <span class="method-badge">
+                                GET
+                            </span>
+
+                            <h3>
+                                YouTube Search
+                            </h3>
+
+                        </div>
+
+                        <span class="api-online">
+                            ●
+                        </span>
+
+                    </div>
+
+                    <p>
+                        Busca videos de YouTube y devuelve
+                        hasta 10 resultados.
+                    </p>
+
+                    <code class="api-endpoint">
+                        /api/ytsearch?q=
+                    </code>
+
+                    <button
+                        class="try-button"
+                        onclick="testAPI('ytsearch')"
+                    >
+                        Probar API
+                    </button>
+
+                </article>
+
+
+                <!-- TIKTOK DOWNLOAD -->
+
+                <article class="api-card">
+
+                    <div class="api-top">
+
+                        <div>
+
+                            <span class="method-badge">
+                                GET
+                            </span>
+
+                            <h3>
+                                TikTok Downloader
+                            </h3>
+
+                        </div>
+
+                        <span class="api-online">
+                            ●
+                        </span>
+
+                    </div>
+
+                    <p>
+                        Descarga videos e imágenes
+                        públicas de TikTok.
+                    </p>
+
+                    <code class="api-endpoint">
+                        /api/tiktokdl?url=
+                    </code>
+
+                    <button
+                        class="try-button"
+                        onclick="testAPI('tiktokdl')"
+                    >
+                        Probar API
+                    </button>
+
+                </article>
+
+
+                <!-- TIKTOK SEARCH -->
+
+                <article class="api-card">
+
+                    <div class="api-top">
+
+                        <div>
+
+                            <span class="method-badge">
+                                GET
+                            </span>
+
+                            <h3>
+                                TikTok Search
+                            </h3>
+
+                        </div>
+
+                        <span class="api-online">
+                            ●
+                        </span>
+
+                    </div>
+
+                    <p>
+                        Busca contenido de TikTok
+                        y devuelve hasta 10 resultados.
+                    </p>
+
+                    <code class="api-endpoint">
+                        /api/tiktoksearch?q=
+                    </code>
+
+                    <button
+                        class="try-button"
+                        onclick="testAPI('tiktoksearch')"
+                    >
+                        Probar API
+                    </button>
+
+                </article>
+
+
+                <!-- FACEBOOK -->
+
+                <article class="api-card">
+
+                    <div class="api-top">
+
+                        <div>
+
+                            <span class="method-badge">
+                                GET
+                            </span>
+
+                            <h3>
+                                Facebook Downloader
+                            </h3>
+
+                        </div>
+
+                        <span class="api-online">
+                            ●
+                        </span>
+
+                    </div>
+
+                    <p>
+                        Descarga videos públicos
+                        desde Facebook.
+                    </p>
+
+                    <code class="api-endpoint">
+                        /api/facebookdl?url=
+                    </code>
+
+                    <button
+                        class="try-button"
+                        onclick="testAPI('facebookdl')"
+                    >
+                        Probar API
+                    </button>
+
+                </article>
+
+
+                <!-- INSTAGRAM -->
+
+                <article class="api-card">
+
+                    <div class="api-top">
+
+                        <div>
+
+                            <span class="method-badge">
+                                GET
+                            </span>
+
+                            <h3>
+                                Instagram Downloader
+                            </h3>
+
+                        </div>
+
+                        <span class="api-online">
+                            ●
+                        </span>
+
+                    </div>
+
+                    <p>
+                        Obtén contenido público de Instagram,
+                        incluyendo fotos y videos.
+                    </p>
+
+                    <code class="api-endpoint">
+                        /api/instagramdl?url=
+                    </code>
+
+                    <button
+                        class="try-button"
+                        onclick="testAPI('instagramdl')"
+                    >
+                        Probar API
+                    </button>
+
+                </article>
+
+
+                <!-- SPOTIFY -->
+
+                <article class="api-card">
+
+                    <div class="api-top">
+
+                        <div>
+
+                            <span class="method-badge">
+                                GET
+                            </span>
+
+                            <h3>
+                                Spotify Search
+                            </h3>
+
+                        </div>
+
+                        <span class="api-online">
+                            ●
+                        </span>
+
+                    </div>
+
+                    <p>
+                        Busca canciones y devuelve información
+                        y URLs disponibles.
+                    </p>
+
+                    <code class="api-endpoint">
+                        /api/spotifysearch?q=
+                    </code>
+
+                    <button
+                        class="try-button"
+                        onclick="testAPI('spotifysearch')"
+                    >
+                        Probar API
+                    </button>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             API TESTER
+        ========================== -->
+
+        <section
+            class="section tester-section"
+            id="tester"
+        >
+
+            <div class="section-title">
+
+                <h2>API Tester</h2>
+
+                <p>
+                    Prueba cualquier endpoint directamente
+                    desde este panel.
+                </p>
+
+            </div>
+
+
+            <div class="tester-card">
+
+                <div class="tester-header">
+
+                    <div>
+
+                        <h2>
+                            Probar endpoint
+                        </h2>
+
+                        <p>
+                            Introduce los parámetros
+                            y ejecuta la petición.
+                        </p>
+
+                    </div>
+
+                    <span class="api-online">
+                        ● ONLINE
+                    </span>
+
+                </div>
+
+
+                <!-- ENDPOINT -->
+
+                <label>
+                    Endpoint
+                </label>
+
+                <div class="endpoint-box">
+
+                    <span>
+                        GET
+                    </span>
+
+                    <input
+                        type="text"
+                        id="endpoint"
+                        placeholder="/api/ytsearch"
+                    >
+
+                </div>
+
+
+                <!-- PARAMETER -->
+
+                <div
+                    class="parameter"
+                    id="parameterContainer"
+                >
+
+                    <label>
+                        Parámetro
+                    </label>
+
+                    <input
+                        type="text"
+                        id="parameter"
+                        placeholder="URL o búsqueda"
+                    >
+
+                </div>
+
+
+                <!-- API KEY -->
+
+                <label>
+                    API Key
+                </label>
+
+                <input
+                    type="text"
+                    id="apikey"
+                    placeholder="Opcional"
+                >
+
+
+                <!-- SEND -->
+
+                <button
+                    class="send-button"
+                    onclick="sendRequest()"
+                >
+                    Ejecutar petición
+                </button>
+
+
+                <!-- RESPONSE -->
+
+                <div class="response-title">
+                    Respuesta JSON
+                </div>
+
+                <pre id="response">Esperando petición...</pre>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <div>
+            <strong>Saitama API</strong>
+        </div>
+
+        <div>
+            APIs gratuitas para desarrolladores.
+        </div>
+
+        <div>
+            © 2026 Saitama API · SaiDev145
+        </div>
+
+    </footer>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script src="/script.js"></script>
+
+</body>
+</html>
