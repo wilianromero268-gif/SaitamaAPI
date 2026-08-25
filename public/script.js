@@ -1,210 +1,415 @@
-// ========================================
-// SAITAMA API - API TESTER
-// ========================================
+// ======================================================
+// SAITAMA API - DASHBOARD
+// ======================================================
 
 const API_CONFIG = {
 
     ytmp3: {
-        endpoint: "/saitama/api/ytmp3",
-        parameter: "url",
-        placeholder: "https://youtube.com/watch?v=..."
+        name: 'YouTube MP3',
+        icon: '🎵',
+        endpoint: '/saitama/api/ytmp3',
+        parameter: 'url',
+        placeholder: 'https://youtube.com/watch?v=...'
     },
 
     ytmp4: {
-        endpoint: "/saitama/api/ytmp4",
-        parameter: "url",
-        placeholder: "https://youtube.com/watch?v=..."
+        name: 'YouTube MP4',
+        icon: '🎬',
+        endpoint: '/saitama/api/ytmp4',
+        parameter: 'url',
+        placeholder: 'https://youtube.com/watch?v=...'
     },
 
     play: {
-        endpoint: "/saitama/api/play",
-        parameter: "q",
-        placeholder: "Nombre de la canción"
+        name: 'Play MP3',
+        icon: '🎧',
+        endpoint: '/saitama/api/play',
+        parameter: 'q',
+        placeholder: 'Nombre de la canción'
     },
 
     play2: {
-        endpoint: "/saitama/api/play2",
-        parameter: "q",
-        placeholder: "Nombre del video"
+        name: 'Play Video',
+        icon: '▶️',
+        endpoint: '/saitama/api/play2',
+        parameter: 'q',
+        placeholder: 'Nombre del video'
     },
 
     ytsearch: {
-        endpoint: "/saitama/api/ytsearch",
-        parameter: "q",
-        placeholder: "Buscar en YouTube"
+        name: 'YouTube Search',
+        icon: '🔎',
+        endpoint: '/saitama/api/ytsearch',
+        parameter: 'q',
+        placeholder: 'Buscar en YouTube'
     },
 
     tiktokdl: {
-        endpoint: "/saitama/api/tiktokdl",
-        parameter: "url",
-        placeholder: "https://www.tiktok.com/@usuario/video/..."
+        name: 'TikTok Downloader',
+        icon: '🎵',
+        endpoint: '/saitama/api/tiktokdl',
+        parameter: 'url',
+        placeholder: 'https://www.tiktok.com/@usuario/video/...'
     },
 
     tiktoksearch: {
-        endpoint: "/saitama/api/tiktoksearch",
-        parameter: "q",
-        placeholder: "Buscar en TikTok"
+        name: 'TikTok Search',
+        icon: '🔍',
+        endpoint: '/saitama/api/tiktoksearch',
+        parameter: 'q',
+        placeholder: 'Buscar en TikTok'
     },
 
     facebookdl: {
-        endpoint: "/saitama/api/facebookdl",
-        parameter: "url",
-        placeholder: "https://www.facebook.com/..."
+        name: 'Facebook Downloader',
+        icon: '📘',
+        endpoint: '/saitama/api/facebookdl',
+        parameter: 'url',
+        placeholder: 'https://www.facebook.com/...'
     },
 
     instagramdl: {
-        endpoint: "/saitama/api/instagramdl",
-        parameter: "url",
-        placeholder: "https://www.instagram.com/..."
+        name: 'Instagram Downloader',
+        icon: '📸',
+        endpoint: '/saitama/api/instagramdl',
+        parameter: 'url',
+        placeholder: 'https://www.instagram.com/...'
     },
 
     spotifysearch: {
-        endpoint: "/saitama/api/spotifysearch",
-        parameter: "q",
-        placeholder: "Nombre de la canción"
-    },
-
-    spotifymp3: {
-        endpoint: "/saitama/api/spotifymp3",
-        parameter: "url",
-        placeholder: "https://open.spotify.com/track/..."
-    },
-
-    pinterest: {
-        endpoint: "/saitama/api/pinterest",
-        parameter: "url",
-        placeholder: "https://www.pinterest.com/..."
-    },
-
-    ai: {
-        endpoint: "/saitama/api/ai",
-        parameter: "q",
-        placeholder: "Escribe algo para Saitama AI"
-    },
-
-    apk: {
-        endpoint: "/saitama/api/apk",
-        parameter: "q",
-        placeholder: "Nombre de la aplicación"
+        name: 'Spotify Search',
+        icon: '🎶',
+        endpoint: '/saitama/api/spotifysearch',
+        parameter: 'q',
+        placeholder: 'Nombre de la canción'
     }
 
 };
 
 
-// ========================================
+// ======================================================
 // ELEMENTOS
-// ========================================
+// ======================================================
 
-const endpointInput =
-    document.getElementById("endpoint");
+const apiGrid =
+    document.getElementById('apiGrid');
+
+const endpointSelect =
+    document.getElementById('endpointSelect');
 
 const parameterInput =
-    document.getElementById("parameter");
+    document.getElementById('parameterInput');
 
 const apiKeyInput =
-    document.getElementById("apikey");
+    document.getElementById('apiKeyInput');
 
 const responseBox =
-    document.getElementById("response");
+    document.getElementById('responseBox');
+
+const urlPreview =
+    document.getElementById('urlPreview');
+
+const resultMedia =
+    document.getElementById('resultMedia');
+
+const resultImage =
+    document.getElementById('resultImage');
 
 
-// ========================================
-// API KEY AUTOMÁTICA
-// ========================================
+// ======================================================
+// API KEY
+// ======================================================
 
-async function loadApiKey() {
+const savedKey =
+    localStorage.getItem('saitama_api_key');
 
-    try {
+if (savedKey) {
 
-        const response =
-            await fetch("/saitama/api/config");
-
-        if (!response.ok) {
-            return;
-        }
-
-        const data =
-            await response.json();
-
-        if (
-            data.status &&
-            data.apikey
-        ) {
-
-            apiKeyInput.value =
-                data.apikey;
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "No se pudo cargar la API key:",
-            error
-        );
-
-    }
+    apiKeyInput.value =
+        savedKey;
 
 }
 
 
-// ========================================
-// PROBAR API
-// ========================================
+apiKeyInput.addEventListener(
+    'input',
+    () => {
 
-function testAPI(name) {
+        localStorage.setItem(
+            'saitama_api_key',
+            apiKeyInput.value.trim()
+        );
 
-    const api =
-        API_CONFIG[name];
-
-    if (!api) {
-
-        showResponse({
-
-            status: false,
-
-            code: 404,
-
-            error: "API no encontrada"
-
-        });
-
-        return;
+        updateUrlPreview();
 
     }
+);
 
 
-    endpointInput.value =
-        api.endpoint;
+// ======================================================
+// TOAST
+// ======================================================
+
+function toast(message) {
+
+    const element =
+        document.getElementById('toast');
+
+    element.textContent =
+        message;
+
+    element.classList.add('show');
+
+    setTimeout(() => {
+
+        element.classList.remove('show');
+
+    }, 2200);
+
+}
 
 
-    parameterInput.value = "";
+// ======================================================
+// COPIAR API KEY
+// ======================================================
+
+document
+    .getElementById('copyKeyButton')
+    .addEventListener(
+        'click',
+        async () => {
+
+            const key =
+                apiKeyInput.value.trim();
+
+            if (!key) {
+
+                toast('Primero introduce tu API key');
+
+                return;
+            }
+
+            try {
+
+                await navigator.clipboard.writeText(key);
+
+                toast('API key copiada');
+
+            } catch {
+
+                apiKeyInput.select();
+
+                document.execCommand('copy');
+
+                toast('API key copiada');
+
+            }
+
+        }
+    );
 
 
-    parameterInput.placeholder =
-        api.placeholder;
+// ======================================================
+// CREAR TARJETAS
+// ======================================================
+
+function createApiCards() {
+
+    apiGrid.innerHTML = '';
+
+    endpointSelect.innerHTML = `
+        <option value="">
+            Selecciona un endpoint
+        </option>
+    `;
 
 
-    parameterInput.dataset.name =
-        api.parameter;
+    for (const [key, api] of Object.entries(API_CONFIG)) {
+
+        const card =
+            document.createElement('div');
+
+        card.className =
+            'api-card';
 
 
-    const methodElement =
-        document.getElementById("method");
+        card.innerHTML = `
 
-    if (methodElement) {
+            <div class="api-top">
 
-        methodElement.textContent =
-            "GET";
+                <div class="api-icon">
+                    ${api.icon}
+                </div>
+
+                <div class="api-method">
+                    GET
+                </div>
+
+                <div class="api-online">
+                    ● ONLINE
+                </div>
+
+            </div>
+
+
+            <h3>
+                ${api.name}
+            </h3>
+
+
+            <p>
+                ${getDescription(key)}
+            </p>
+
+
+            <div class="endpoint-row">
+
+                <div class="endpoint">
+
+                    <code>
+                        ${api.endpoint}
+                    </code>
+
+                </div>
+
+
+                <button
+                    class="test-api-btn"
+                    data-api="${key}"
+                >
+                    Probar
+                </button>
+
+            </div>
+
+        `;
+
+
+        apiGrid.appendChild(card);
+
+
+        const option =
+            document.createElement('option');
+
+        option.value =
+            key;
+
+        option.textContent =
+            api.name;
+
+        endpointSelect.appendChild(
+            option
+        );
 
     }
 
 
     document
-        .getElementById("tester")
-        ?.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
+        .querySelectorAll('.test-api-btn')
+        .forEach(button => {
+
+            button.addEventListener(
+                'click',
+                () => {
+
+                    selectApi(
+                        button.dataset.api
+                    );
+
+                }
+            );
+
+        });
+
+
+    document
+        .getElementById('endpointCount')
+        .textContent =
+        Object.keys(API_CONFIG).length;
+
+}
+
+
+// ======================================================
+// DESCRIPCIONES
+// ======================================================
+
+function getDescription(name) {
+
+    const descriptions = {
+
+        ytmp3:
+            'Descarga audio MP3 desde un enlace de YouTube.',
+
+        ytmp4:
+            'Descarga videos MP4 desde YouTube.',
+
+        play:
+            'Busca una canción y prepara el audio MP3.',
+
+        play2:
+            'Busca un video y prepara el archivo MP4.',
+
+        ytsearch:
+            'Realiza búsquedas en YouTube.',
+
+        tiktokdl:
+            'Descarga contenido disponible de TikTok.',
+
+        tiktoksearch:
+            'Busca contenido en TikTok.',
+
+        facebookdl:
+            'Procesa enlaces públicos de Facebook.',
+
+        instagramdl:
+            'Procesa contenido disponible de Instagram.',
+
+        spotifysearch:
+            'Busca canciones y resultados relacionados con Spotify.'
+
+    };
+
+    return descriptions[name] ||
+        'Endpoint de Saitama API.';
+
+}
+
+
+// ======================================================
+// SELECCIONAR API
+// ======================================================
+
+function selectApi(name) {
+
+    const api =
+        API_CONFIG[name];
+
+    if (!api) return;
+
+
+    endpointSelect.value =
+        name;
+
+
+    parameterInput.value =
+        '';
+
+    parameterInput.placeholder =
+        api.placeholder;
+
+
+    parameterInput.dataset.parameter =
+        api.parameter;
+
+
+    updateUrlPreview();
+
+
+    document
+        .getElementById('tester')
+        .scrollIntoView({
+            behavior: 'smooth'
         });
 
 
@@ -217,143 +422,212 @@ function testAPI(name) {
 }
 
 
-// ========================================
-// EJECUTAR PETICIÓN
-// ========================================
+// ======================================================
+// CAMBIO DE ENDPOINT
+// ======================================================
 
-async function sendRequest() {
+endpointSelect.addEventListener(
+    'change',
+    () => {
 
-    const endpoint =
-        endpointInput.value.trim();
+        const name =
+            endpointSelect.value;
 
-    const parameter =
+        if (!name) {
+
+            parameterInput.value = '';
+
+            parameterInput.placeholder =
+                'Selecciona un endpoint...';
+
+            delete parameterInput.dataset.parameter;
+
+            updateUrlPreview();
+
+            return;
+        }
+
+
+        selectApi(name);
+
+    }
+);
+
+
+// ======================================================
+// CONSTRUIR URL
+// ======================================================
+
+function buildUrl() {
+
+    const name =
+        endpointSelect.value;
+
+    const api =
+        API_CONFIG[name];
+
+    if (!api) return '';
+
+
+    const value =
         parameterInput.value.trim();
 
-    let apiKey =
-        apiKeyInput.value.trim();
+
+    const params =
+        new URLSearchParams();
 
 
-    if (!endpoint) {
+    if (value) {
 
-        showResponse({
-
-            status: false,
-
-            code: 400,
-
-            error: "Introduce un endpoint."
-
-        });
-
-        return;
+        params.set(
+            api.parameter,
+            value
+        );
 
     }
 
 
-    if (!parameter) {
+    const key =
+        apiKeyInput.value.trim();
 
-        showResponse({
 
-            status: false,
+    if (key) {
 
-            code: 400,
+        params.set(
+            'apikey',
+            key
+        );
 
-            error: "Introduce un parámetro."
+    }
 
-        });
+
+    return (
+        api.endpoint +
+        (
+            params.toString()
+                ? '?' + params.toString()
+                : ''
+        )
+    );
+
+}
+
+
+// ======================================================
+// ACTUALIZAR URL
+// ======================================================
+
+function updateUrlPreview() {
+
+    const url =
+        buildUrl();
+
+    urlPreview.textContent =
+        url ||
+        'Selecciona un endpoint...';
+
+}
+
+
+parameterInput.addEventListener(
+    'input',
+    updateUrlPreview
+);
+
+
+// ======================================================
+// EJECUTAR API
+// ======================================================
+
+document
+    .getElementById('sendButton')
+    .addEventListener(
+        'click',
+        sendRequest
+    );
+
+
+async function sendRequest() {
+
+    const name =
+        endpointSelect.value;
+
+    if (!name) {
+
+        showError(
+            'Selecciona un endpoint.'
+        );
+
+        return;
+    }
+
+
+    const api =
+        API_CONFIG[name];
+
+
+    const value =
+        parameterInput.value.trim();
+
+
+    if (!value) {
+
+        showError(
+            `Introduce el parámetro: ${api.parameter}`
+        );
 
         parameterInput.focus();
 
         return;
-
     }
 
 
-    // Si no existe la API key,
-    // intentamos cargarla automáticamente.
-
-    if (!apiKey) {
-
-        await loadApiKey();
-
-        apiKey =
-            apiKeyInput.value.trim();
-
-    }
+    const key =
+        apiKeyInput.value.trim();
 
 
-    if (!apiKey) {
+    if (!key) {
 
-        showResponse({
+        showError(
+            'Introduce tu API key.'
+        );
 
-            status: false,
-
-            code: 500,
-
-            error: "API key no disponible",
-
-            message:
-                "No se pudo obtener la API key desde el servidor."
-
-        });
+        apiKeyInput.focus();
 
         return;
-
     }
+
+
+    const url =
+        buildUrl();
 
 
     responseBox.textContent =
-        "Ejecutando petición...";
+        'Ejecutando petición...';
+
+
+    resultMedia.style.display =
+        'none';
 
 
     try {
 
-        const parameterName =
-            parameterInput.dataset.name ||
-            "q";
-
-
-        const params =
-            new URLSearchParams();
-
-
-        params.set(
-            parameterName,
-            parameter
-        );
-
-
-        params.set(
-            "apikey",
-            apiKey
-        );
-
-
-        const separator =
-            endpoint.includes("?")
-                ? "&"
-                : "?";
-
-
-        const url =
-            endpoint +
-            separator +
-            params.toString();
+        const start =
+            Date.now();
 
 
         const response =
-            await fetch(url, {
-                method: "GET",
-                headers: {
-                    "Accept":
-                        "application/json"
-                }
-            });
+            await fetch(url);
+
+
+        const elapsed =
+            Date.now() - start;
 
 
         const contentType =
-            response.headers
-                .get("content-type") || "";
+            response.headers.get(
+                'content-type'
+            ) || '';
 
 
         let data;
@@ -361,7 +635,7 @@ async function sendRequest() {
 
         if (
             contentType.includes(
-                "application/json"
+                'application/json'
             )
         ) {
 
@@ -372,7 +646,6 @@ async function sendRequest() {
 
             const text =
                 await response.text();
-
 
             data = {
 
@@ -390,68 +663,258 @@ async function sendRequest() {
         }
 
 
-        showResponse(data);
+        showResponse(
+            data,
+            elapsed,
+            response.status
+        );
 
 
-        // Actualizar estadísticas
-        if (
-            typeof loadStats === "function"
-        ) {
-
-            loadStats();
-
-        }
-
+        loadStats();
 
     } catch (error) {
 
-        showResponse({
-
-            status: false,
-
-            code: 500,
-
-            error:
-                "No se pudo conectar con la API.",
-
-            detail:
-                error.message
-
-        });
+        showError(
+            'No se pudo conectar con la API.',
+            error.message
+        );
 
     }
 
 }
 
 
-// ========================================
-// MOSTRAR JSON
-// ========================================
+// ======================================================
+// MOSTRAR RESPUESTA
+// ======================================================
 
-function showResponse(data) {
+function showResponse(
+    data,
+    elapsed = null,
+    statusCode = null
+) {
 
-    try {
+    let output =
+        data;
 
-        responseBox.textContent =
+
+    if (
+        typeof data === 'object'
+    ) {
+
+        output =
             JSON.stringify(
                 data,
                 null,
                 2
             );
 
-    } catch {
+    }
 
-        responseBox.textContent =
-            String(data);
+
+    let prefix = '';
+
+
+    if (statusCode !== null) {
+
+        prefix +=
+            `HTTP ${statusCode}`;
 
     }
+
+
+    if (elapsed !== null) {
+
+        prefix +=
+            prefix
+                ? `  •  ${elapsed} ms`
+                : `${elapsed} ms`;
+
+    }
+
+
+    responseBox.textContent =
+        prefix
+            ? prefix + '\n\n' + output
+            : output;
+
+
+    showImageFromResponse(data);
 
 }
 
 
-// ========================================
-// ESTADÍSTICAS
-// ========================================
+// ======================================================
+// IMAGEN DEL RESULTADO
+// ======================================================
+
+function showImageFromResponse(data) {
+
+    resultMedia.style.display =
+        'none';
+
+
+    if (
+        !data ||
+        typeof data !== 'object'
+    ) {
+
+        return;
+
+    }
+
+
+    const imageUrl =
+        findImage(data);
+
+
+    if (!imageUrl) {
+
+        return;
+
+    }
+
+
+    resultImage.src =
+        imageUrl;
+
+
+    resultImage.onload =
+        () => {
+
+            resultMedia.style.display =
+                'block';
+
+        };
+
+
+    resultImage.onerror =
+        () => {
+
+            resultMedia.style.display =
+                'none';
+
+        };
+
+}
+
+
+// ======================================================
+// BUSCAR THUMBNAIL / IMAGEN
+// ======================================================
+
+function findImage(data) {
+
+    const possibleKeys = [
+
+        'thumbnail',
+        'thumb',
+        'image',
+        'image_url',
+        'cover',
+        'cover_url',
+        'poster',
+        'miniatura'
+
+    ];
+
+
+    for (const key of possibleKeys) {
+
+        if (
+            typeof data[key] ===
+            'string' &&
+            data[key].startsWith('http')
+        ) {
+
+            return data[key];
+
+        }
+
+    }
+
+
+    if (data.data) {
+
+        if (
+            typeof data.data ===
+            'object'
+        ) {
+
+            return findImage(
+                data.data
+            );
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+// ======================================================
+// ERROR
+// ======================================================
+
+function showError(
+    message,
+    detail = ''
+) {
+
+    responseBox.textContent =
+        JSON.stringify(
+            {
+                status: false,
+                error: message,
+                ...(detail
+                    ? { detail }
+                    : {})
+            },
+            null,
+            2
+        );
+
+}
+
+
+// ======================================================
+// LIMPIAR
+// ======================================================
+
+document
+    .getElementById('clearButton')
+    .addEventListener(
+        'click',
+        () => {
+
+            endpointSelect.value =
+                '';
+
+            parameterInput.value =
+                '';
+
+            parameterInput.placeholder =
+                'Selecciona un endpoint...';
+
+            responseBox.textContent =
+                'Esperando una petición...';
+
+            urlPreview.textContent =
+                'Selecciona un endpoint...';
+
+            resultMedia.style.display =
+                'none';
+
+        }
+    );
+
+
+// ======================================================
+// STATS
+// ======================================================
 
 async function loadStats() {
 
@@ -459,12 +922,17 @@ async function loadStats() {
 
         const response =
             await fetch(
-                "/saitama/api/stats"
+                '/saitama/api/stats'
             );
 
 
         if (!response.ok) {
-            return;
+
+            throw new Error(
+                'Stats HTTP ' +
+                response.status
+            );
+
         }
 
 
@@ -473,11 +941,13 @@ async function loadStats() {
 
 
         if (
-            !data.status ||
+            !data ||
             !data.data
         ) {
 
-            return;
+            throw new Error(
+                'Formato de stats inválido'
+            );
 
         }
 
@@ -486,84 +956,135 @@ async function loadStats() {
             data.data;
 
 
-        const total =
-            document.getElementById(
-                "total-requests"
+        document
+            .getElementById('totalRequests')
+            .textContent =
+            formatNumber(
+                stats.total
             );
 
 
-        const today =
-            document.getElementById(
-                "today-requests"
+        document
+            .getElementById('todayRequests')
+            .textContent =
+            formatNumber(
+                stats.today
             );
 
 
-        const status =
-            document.getElementById(
-                "api-status"
-            );
+        const count =
+            Object.keys(
+                stats.apis || {}
+            ).length;
 
 
-        if (total) {
-
-            total.textContent =
-                Number(
-                    stats.total || 0
-                ).toLocaleString();
-
-        }
+        document
+            .getElementById('endpointCount')
+            .textContent =
+            count;
 
 
-        if (today) {
-
-            today.textContent =
-                Number(
-                    stats.today || 0
-                ).toLocaleString();
-
-        }
+        document
+            .getElementById('apiStatus')
+            .textContent =
+            '● ONLINE';
 
 
-        if (status) {
+        document
+            .getElementById('lastUpdate')
+            .textContent =
+            'Actualizado ahora';
 
-            status.textContent =
-                "ONLINE";
+    } catch (error) {
 
-        }
-
-    } catch {
-
-        const status =
-            document.getElementById(
-                "api-status"
-            );
+        document
+            .getElementById('apiStatus')
+            .textContent =
+            '● ERROR';
 
 
-        if (status) {
+        document
+            .getElementById('apiStatus')
+            .style.color =
+            '#ff5572';
 
-            status.textContent =
-                "OFFLINE";
 
-        }
+        document
+            .getElementById('lastUpdate')
+            .textContent =
+            'No se pudo cargar stats';
 
     }
 
 }
 
 
-// ========================================
-// ENTER PARA EJECUTAR
-// ========================================
+// ======================================================
+// FORMATO NÚMEROS
+// ======================================================
 
-parameterInput?.addEventListener(
-    "keydown",
+function formatNumber(number) {
+
+    return Number(
+        number || 0
+    ).toLocaleString(
+        'es-PE'
+    );
+
+}
+
+
+// ======================================================
+// MÚSICA
+// ======================================================
+
+const MUSIC_URL =
+    'https://youtu.be/Kqmzbpa7_6w';
+
+
+const musicButton =
+    document.getElementById(
+        'musicButton'
+    );
+
+
+musicButton.addEventListener(
+    'click',
+    () => {
+
+        /*
+         * Los navegadores modernos bloquean
+         * el autoplay de audio externo.
+         *
+         * Por eso abrimos la canción al
+         * pulsar el botón.
+         */
+
+        window.open(
+            MUSIC_URL,
+            '_blank',
+            'noopener,noreferrer'
+        );
+
+
+        musicButton.textContent =
+            '🎵 Música abierta';
+
+    }
+);
+
+
+// ======================================================
+// ENTER
+// ======================================================
+
+parameterInput.addEventListener(
+    'keydown',
     event => {
 
         if (
-            event.key === "Enter"
+            event.key === 'Enter'
         ) {
-
-            event.preventDefault();
 
             sendRequest();
 
@@ -573,45 +1094,19 @@ parameterInput?.addEventListener(
 );
 
 
-endpointInput?.addEventListener(
-    "keydown",
-    event => {
+// ======================================================
+// INICIALIZAR
+// ======================================================
 
-        if (
-            event.key === "Enter"
-        ) {
+createApiCards();
 
-            event.preventDefault();
+loadStats();
 
-            parameterInput.focus();
-
-        }
-
-    }
+setInterval(
+    loadStats,
+    15000
 );
-
-
-// ========================================
-// INICIO
-// ========================================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        loadApiKey();
-
-        loadStats();
-
-        setInterval(
-            loadStats,
-            10000
-        );
-
-    }
-);
-
 
 console.log(
-    "Saitama API Tester iniciado."
+    'Saitama API Dashboard iniciado.'
 );
