@@ -366,9 +366,9 @@ function createCard(key,api){
  <p>${api.description}</p>
 
  <div class="endpoint">
-  <code id="ep-${key}">
-   GET ${api.endpoint}?${api.parameter}=...&apikey=${API_KEY}
-  </code>
+<code id="endpoint-${key}">
+    GET ${api.endpoint}?${api.parameter}=...&apikey=${API_KEY}
+</code>
   <button onclick="copyEndpoint('${key}')">📋</button>
  </div>
 
