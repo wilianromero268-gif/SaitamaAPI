@@ -1,13 +1,18 @@
 const { execFile } = require('child_process')
 const fs = require('fs')
 const path = require('path')
-
+const os = require('os')
 const YTDLP = 'yt-dlp'
-const TMP_DIR = path.join(__dirname, '..', 'tmp', 'play2')
 
-if (!fs.existsSync(TMP_DIR)) {
-    fs.mkdirSync(TMP_DIR, { recursive: true })
-}
+const DOWNLOAD_DIR = path.join(
+    os.tmpdir(),
+    'saitama-api',
+    'play2'
+)
+
+fs.mkdirSync(DOWNLOAD_DIR, {
+    recursive: true
+})
 
 function runYtDlp(args) {
     return new Promise((resolve, reject) => {
