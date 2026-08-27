@@ -318,6 +318,7 @@ app.use((err, req, res, next) => {
 if (require.main === module) {
     const PORT = process.env.PORT || 3000
 
+    if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
         console.log(`Saitama API running on port ${PORT}`)
     })
