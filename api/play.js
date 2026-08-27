@@ -9,12 +9,17 @@ const YTDLP = path.join(
     'yt-dlp'
 )
 
-const DOWNLOAD_DIR = path.join(
-    process.cwd(),
-    'tmp',
-    'play'
+const FFMPEG_DIR = path.join(
+    __dirname,
+    '..',
+    'bin'
 )
 
+const DOWNLOAD_DIR = path.join(
+    '/tmp',
+    'saitama',
+    'play'
+)
 if (!fs.existsSync(DOWNLOAD_DIR)) {
     fs.mkdirSync(DOWNLOAD_DIR, {
         recursive: true
