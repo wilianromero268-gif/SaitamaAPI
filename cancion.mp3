@@ -1,6 +1,0 @@
-{
-  "status": false,
-  "code": 401,
-  "error": "Unauthorized",
-  "message": "API key is required"
-}
