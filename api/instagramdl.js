@@ -3,15 +3,18 @@ const fs = require('fs')
 const path = require('path')
 const crypto = require('crypto')
 const { spawn } = require('child_process')
+const os = require('os')
 
-const TMP_DIR = path.join(process.cwd(), 'tmp', 'instagramdl')
 const EXPIRE_TIME = 30 * 60 * 1000
+const DOWNLOAD_DIR = path.join(
+    os.tmpdir(),
+    'saitama-api',
+    'instagramdl'
+)
 
-const YTDLP_PATH = process.env.YTDLP_PATH || 'yt-dlp'
-
-if (!fs.existsSync(TMP_DIR)) {
-    fs.mkdirSync(TMP_DIR, { recursive: true })
-}
+fs.mkdirSync(DOWNLOAD_DIR, {
+    recursive: true
+})
 
 const files = new Map()
 
