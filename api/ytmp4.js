@@ -4,8 +4,6 @@ const path = require('path')
 const os = require('os')
 const YTDLP = 'yt-dlp'
 
-const YTDLP = 'yt-dlp'
-
 const DOWNLOAD_DIR = path.join(
     os.tmpdir(),
     'saitama-ytmp4'
