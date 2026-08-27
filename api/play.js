@@ -2,7 +2,12 @@ const { execFile } = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
-const YTDLP = 'yt-dlp'
+const YTDLP = path.join(
+    __dirname,
+    '..',
+    'bin',
+    'yt-dlp'
+)
 
 const DOWNLOAD_DIR = path.join(
     process.cwd(),
