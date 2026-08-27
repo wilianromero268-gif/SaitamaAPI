@@ -1,137 +1,140 @@
 const { execFile } = require('child_process')
+const { promisify } = require('util')
+
+const execFileAsync = promisify(execFile)
 
 const YTDLP = 'yt-dlp'
 
-function searchTikTok(query) {
-    return new Promise((resolve, reject) => {
+async function extractTikTok(url) {
 
-        const args = [
-            `tiktoksearch10:${query}`,
+    const { stdout } = await execFileAsync(
+        YTDLP,
+        [
             '--dump-single-json',
             '--skip-download',
             '--no-warnings',
-            '--ignore-errors'
-        ]
+            '--no-playlist',
+            url
+        ],
+        {
+            maxBuffer: 50 * 1024 * 1024,
+            timeout: 120000
+        }
+    )
 
-        execFile(
-            YTDLP,
-            args,
-            {
-                maxBuffer: 50 * 1024 * 1024,
-                timeout: 120000
-            },
-            (error, stdout, stderr) => {
-
-                if (error && !stdout) {
-                    return reject(
-                        new Error(
-                            stderr?.trim() ||
-                            error.message ||
-                            'TikTok search failed'
-                        )
-                    )
-                }
-
-                try {
-                    const data = JSON.parse(stdout)
-
-                    resolve(
-                        (data.entries || [])
-                            .filter(Boolean)
-                            .slice(0, 10)
-                    )
-
-                } catch {
-                    reject(
-                        new Error(
-                            'No se pudo procesar la respuesta de TikTok'
-                        )
-                    )
-                }
-            }
-        )
-    })
+    return JSON.parse(stdout)
 }
 
 async function tiktoksearch(req, res) {
 
-    const q = req.query.q
+    const url = String(req.query.url || '').trim()
 
-    if (!q || !q.trim()) {
+    if (!url) {
         return res.status(400).json({
             status: false,
             code: 400,
+            creator: 'SaiDev145',
             error: 'Bad Request',
-            message: 'El parámetro q es obligatorio'
+            message: 'El parámetro url es obligatorio'
+        })
+    }
+
+    if (!/tiktok\.com/i.test(url)) {
+        return res.status(400).json({
+            status: false,
+            code: 400,
+            creator: 'SaiDev145',
+            error: 'Invalid URL',
+            message: 'La URL no parece ser de TikTok'
         })
     }
 
     try {
 
-        const entries = await searchTikTok(q.trim())
+        const info = await extractTikTok(url)
 
-        const results = entries.map((video, index) => {
+        const entries = Array.isArray(info.entries)
+            ? info.entries
+            : [info]
 
-            const id = video.id || null
+        const results = entries
+            .filter(Boolean)
+            .slice(0, 7)
+            .map(item => {
 
-            return {
-                position: index + 1,
+                const id =
+                    item.id || null
 
-                id,
-
-                title:
-                    video.title ||
-                    video.description ||
-                    null,
-
-                url:
-                    video.webpage_url ||
-                    (id
-                        ? `https://www.tiktok.com/@${video.uploader_id || video.uploader || ''}/video/${id}`
-                        : null),
-
-                thumbnail:
-                    video.thumbnail ||
-                    null,
-
-                duration:
-                    video.duration ||
-                    0,
-
-                username:
-                    video.uploader_id ||
-                    video.uploader ||
-                    null,
-
-                author:
-                    video.uploader ||
-                    video.channel ||
-                    null,
-
-                views:
-                    video.view_count ||
-                    0,
-
-                likes:
-                    video.like_count ||
-                    0,
-
-                comments:
-                    video.comment_count ||
-                    0,
-
-                description:
-                    video.description ||
+                const username =
+                    item.uploader ||
+                    item.uploader_id ||
                     null
-            }
-        })
+
+                return {
+                    type: 'video',
+
+                    id,
+
+                    title:
+                        item.title ||
+                        item.description ||
+                        null,
+
+                    description:
+                        item.description ||
+                        null,
+
+                    url:
+                        item.webpage_url ||
+                        item.original_url ||
+                        null,
+
+                    thumbnail:
+                        item.thumbnail ||
+                        null,
+
+                    author: {
+                        username,
+                        name:
+                            item.channel ||
+                            item.uploader ||
+                            null,
+
+                        id:
+                            item.uploader_id ||
+                            null
+                    },
+
+                    duration:
+                        item.duration || 0,
+
+                    views:
+                        item.view_count || 0,
+
+                    likes:
+                        item.like_count || 0,
+
+                    comments:
+                        item.comment_count || 0,
+
+                    shares:
+                        item.repost_count ||
+                        item.share_count ||
+                        0,
+
+                    created_at:
+                        item.timestamp ||
+                        null
+                }
+            })
 
         return res.json({
             status: true,
             code: 200,
             creator: 'SaiDev145',
-            query: q,
+
             total: results.length,
+
             results
         })
 
@@ -140,9 +143,15 @@ async function tiktoksearch(req, res) {
         return res.status(500).json({
             status: false,
             code: 500,
+            creator: 'SaiDev145',
+
             error: 'TikTok Search Error',
-            message: 'No se pudo realizar la búsqueda',
-            detail: error.message
+
+            message:
+                'No se pudo obtener la información de TikTok',
+
+            detail:
+                error.message
         })
     }
 }

@@ -3,72 +3,34 @@ const { promisify } = require('util')
 const fs = require('fs')
 const path = require('path')
 
-const execFileAsync = promisify(execFile)
+const exec = promisify(execFile)
 
-const YTDLP = 'yt-dlp'
+const DIR = path.join(__dirname, '..', 'tmp', 'tiktok')
+const LIFE = 30 * 60 * 1000
 
-const DOWNLOAD_DIR = path.join(
-    __dirname,
-    '..',
-    'tmp',
-    'tiktok'
-)
-
-const FILE_LIFETIME = 30 * 60 * 1000
-
-if (!fs.existsSync(DOWNLOAD_DIR)) {
-    fs.mkdirSync(DOWNLOAD_DIR, {
-        recursive: true
-    })
+if (!fs.existsSync(DIR)) {
+    fs.mkdirSync(DIR, { recursive: true })
 }
 
-
-// ==========================================
-// LIMPIAR ARCHIVOS ANTIGUOS
-// ==========================================
-
-function cleanOldFiles() {
-
-    if (!fs.existsSync(DOWNLOAD_DIR)) {
-        return
-    }
+function clean() {
+    if (!fs.existsSync(DIR)) return
 
     const now = Date.now()
 
-    for (const file of fs.readdirSync(DOWNLOAD_DIR)) {
-
-        const filePath = path.join(
-            DOWNLOAD_DIR,
-            file
-        )
+    for (const file of fs.readdirSync(DIR)) {
+        const filePath = path.join(DIR, file)
 
         try {
-
-            const stat = fs.statSync(filePath)
-
-            if (
-                now - stat.mtimeMs >
-                FILE_LIFETIME
-            ) {
-
+            if (now - fs.statSync(filePath).mtimeMs > LIFE) {
                 fs.unlinkSync(filePath)
-
             }
-
         } catch {}
-
     }
 }
 
-
-// ==========================================
-// OBTENER INFORMACIÓN
-// ==========================================
-
-async function getTikTokInfo(url) {
-
-    const { stdout } = await execFileAsync(
-        YTDLP,
+async function getInfo(url) {
+    const { stdout } = await exec(
+        'yt-dlp',
         [
             '--dump-single-json',
             '--skip-download',
@@ -77,220 +39,130 @@ async function getTikTokInfo(url) {
             url
         ],
         {
-            maxBuffer: 50 * 1024 * 1024,
-            timeout: 120000
+            timeout: 120000,
+            maxBuffer: 50 * 1024 * 1024
         }
     )
 
     return JSON.parse(stdout)
 }
 
-
-// ==========================================
-// DESCARGAR MP4
-// ==========================================
-
-async function downloadTikTok(url, output) {
-
-    await execFileAsync(
-        YTDLP,
+async function downloadVideo(url, output) {
+    await exec(
+        'yt-dlp',
         [
             '--no-warnings',
             '--no-playlist',
-
             '-f',
             'bv*[ext=mp4]+ba/b[ext=mp4]/b',
-
             '--merge-output-format',
             'mp4',
-
-            '--output',
+            '-o',
             output,
-
             url
         ],
         {
-            maxBuffer: 50 * 1024 * 1024,
-            timeout: 300000
+            timeout: 300000,
+            maxBuffer: 50 * 1024 * 1024
         }
     )
-
 }
-
-
-// ==========================================
-// IMÁGENES
-// ==========================================
-
-function getImages(info) {
-
-    return (info.thumbnails || [])
-        .map(x => x.url)
-        .filter(Boolean)
-
-}
-
-
-// ==========================================
-// HANDLER
-// ==========================================
 
 async function tiktokdl(req, res) {
 
-    cleanOldFiles()
+    clean()
 
-    const url = req.query.url
+    const url = String(req.query.url || '').trim()
 
     if (!url) {
-
         return res.status(400).json({
-
             status: false,
-
             code: 400,
-
             error: 'Bad Request',
-
-            message:
-                'El parámetro url es obligatorio'
-
+            message: 'El parámetro url es obligatorio'
         })
-
     }
 
-
-    if (
-        !url.includes('tiktok.com') &&
-        !url.includes('vt.tiktok.com')
-    ) {
-
+    if (!/tiktok\.com/i.test(url)) {
         return res.status(400).json({
-
             status: false,
-
             code: 400,
-
             error: 'Invalid URL',
-
-            message:
-                'La URL proporcionada no es de TikTok'
-
+            message: 'La URL no es de TikTok'
         })
-
     }
-
 
     try {
 
-        // ==================================
-        // OBTENER INFORMACIÓN
-        // ==================================
+        const info = await getInfo(url)
 
-        const info =
-            await getTikTokInfo(url)
+        /*
+         * Solo vídeos
+         */
 
+        const webpage =
+            info.webpage_url ||
+            info.original_url ||
+            url
+
+        if (
+            webpage.includes('/photo/')
+        ) {
+            return res.status(422).json({
+                status: false,
+                code: 422,
+                creator: 'SaiDev145',
+                type: 'image',
+                error: 'Not a video',
+                message:
+                    'Este enlace corresponde a una publicación de fotos de TikTok'
+            })
+        }
 
         const id =
             info.id ||
             Date.now().toString()
 
-
-        const filename =
-            `${id}.mp4`
-
+        const filename = `${id}.mp4`
 
         const output =
-            path.join(
-                DOWNLOAD_DIR,
-                filename
-            )
+            path.join(DIR, filename)
 
-
-        // ==================================
-        // SI YA EXISTE Y TIENE MENOS DE 30 MIN
-        // ==================================
-
-        if (fs.existsSync(output)) {
-
-            const stat =
-                fs.statSync(output)
-
-            const age =
-                Date.now() - stat.mtimeMs
-
-            if (age > FILE_LIFETIME) {
-
-                try {
-                    fs.unlinkSync(output)
-                } catch {}
-
-            }
-
-        }
-
-
-        // ==================================
-        // DESCARGAR
-        // ==================================
+        /*
+         * Descargar solamente si no existe
+         */
 
         if (!fs.existsSync(output)) {
-
-            await downloadTikTok(
-                url,
-                output
-            )
-
+            await downloadVideo(url, output)
         }
 
-
-        // ==================================
-        // COMPROBAR ARCHIVO
-        // ==================================
-
         if (!fs.existsSync(output)) {
-
             throw new Error(
-                'El archivo MP4 no fue generado'
+                'No se pudo generar el archivo MP4'
             )
-
         }
-
-
-        // ==================================
-        // URL DEL MP4
-        // ==================================
 
         const host =
             `${req.protocol}://${req.get('host')}`
 
-
-        const videoUrl =
-            `${host}/saitama/api/tiktokdl/file/${encodeURIComponent(filename)}`
-
-
-        // ==================================
-        // RESPUESTA
-        // ==================================
+        const video =
+            `${host}/saitama/api/tiktokdl/file/${filename}`
 
         return res.json({
 
             status: true,
-
             code: 200,
-
             creator: 'SaiDev145',
 
             type: 'video',
 
-            video: videoUrl,
+            video,
 
             thumbnail:
                 info.thumbnail ||
                 null,
 
-            id:
-                info.id ||
-                null,
+            id,
 
             title:
                 info.title ||
@@ -307,7 +179,6 @@ async function tiktokdl(req, res) {
                 null,
 
             author: {
-
                 username:
                     info.uploader ||
                     info.uploader_id ||
@@ -321,12 +192,11 @@ async function tiktokdl(req, res) {
                 id:
                     info.uploader_id ||
                     null
-
             },
 
             duration:
                 info.duration ||
-                null,
+                0,
 
             views:
                 info.view_count ||
@@ -340,166 +210,93 @@ async function tiktokdl(req, res) {
                 info.comment_count ||
                 0,
 
-            reposts:
-                info.repost_count ||
-                0,
-
-            saves:
-                info.save_count ||
-                0,
-
-            images:
-                getImages(info),
-
             url,
 
             resolved_url:
-                info.webpage_url ||
-                url,
+                webpage,
 
             source:
-                info.webpage_url ||
-                url,
+                webpage,
 
             expires_in:
                 '30 minutes'
-
         })
 
     } catch (error) {
 
         return res.status(500).json({
-
             status: false,
-
             code: 500,
-
-            error:
-                'TikTok Extraction Error',
-
+            error: 'TikTok Extraction Error',
             message:
                 'No se pudo descargar el video de TikTok',
-
             detail:
+                error.stderr ||
                 error.message
-
         })
-
     }
-
 }
 
 
-// ==========================================
-// SERVIR MP4
-// ==========================================
+/*
+ * SERVIR MP4
+ * No necesita API key
+ */
 
-async function serveTikTokFile(req, res) {
+function serveTikTokFile(req, res) {
 
-    cleanOldFiles()
+    clean()
 
     const filename =
         path.basename(req.params.filename)
-
 
     if (
         !filename.endsWith('.mp4') ||
         filename.includes('..')
     ) {
-
         return res.status(400).json({
-
             status: false,
-
             code: 400,
-
-            error:
-                'Archivo inválido'
-
+            error: 'Archivo inválido'
         })
-
     }
 
+    const file =
+        path.join(DIR, filename)
 
-    const filePath =
-        path.join(
-            DOWNLOAD_DIR,
-            filename
-        )
-
-
-    if (!fs.existsSync(filePath)) {
-
+    if (!fs.existsSync(file)) {
         return res.status(404).json({
-
             status: false,
-
             code: 404,
-
-            error:
-                'Video no encontrado',
-
-            message:
-                'El archivo expiró o ya fue eliminado'
-
+            error: 'Video no encontrado',
+            message: 'El archivo expiró o no existe'
         })
-
     }
-
-
-    const stat =
-        fs.statSync(filePath)
-
 
     if (
-        Date.now() - stat.mtimeMs >
-        FILE_LIFETIME
+        Date.now() - fs.statSync(file).mtimeMs > LIFE
     ) {
 
         try {
-            fs.unlinkSync(filePath)
+            fs.unlinkSync(file)
         } catch {}
 
         return res.status(404).json({
-
             status: false,
-
             code: 404,
-
-            error:
-                'Video expirado'
-
+            error: 'Video expirado'
         })
-
     }
 
-
-    res.setHeader(
-        'Content-Type',
-        'video/mp4'
-    )
+    res.setHeader('Content-Type', 'video/mp4')
 
     res.setHeader(
         'Content-Disposition',
         `inline; filename="${filename}"`
     )
 
-    res.setHeader(
-        'Cache-Control',
-        'no-cache'
-    )
-
-
-    return res.sendFile(
-        filePath
-    )
-
+    return res.sendFile(file)
 }
-
-
-// ==========================================
-// EXPORTAR
-// ==========================================
 
 module.exports = tiktokdl
 

@@ -1,7 +1,7 @@
 {
-  "total": 49,
-  "today": 12,
-  "date": "2026-08-25",
+  "total": 101,
+  "today": 22,
+  "date": "2026-08-26",
   "apis": {
     "test": 0,
     "main": 0,
@@ -11,8 +11,15 @@
     "ytsearch": 0,
     "tiktokdl": 0,
     "tiktoksearch": 0,
-    "ytmp4": 7,
-    "play": 2,
-    "play2": 3
+    "ytmp4": 0,
+    "play": 1,
+    "play2": 0,
+    "facebookdl": 0,
+    "spotifysearch": 2,
+    "spotifydl": 5,
+    "playstoresearch": 1,
+    "pinterestdl": 9,
+    "pinsearch": 1,
+    "shazam": 3
   }
 }

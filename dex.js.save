@@ -16,14 +16,6 @@ const ytmp4 = require('./api/ytmp4')
 const ytmp3 = require('./api/ytmp3')
 const play = require('./api/play')
 const play2 = require('./api/play2')
-const facebookdl = require('./api/facebookdl')
-const spotifysearch = require('./api/spotifysearch')
-const spotifydl = require('./api/spotifydl')
-const instagramdl = require('./api/instagramdl')
-const playstoresearch = require('./api/playstoresearch')
-const pinterestdl = require('./api/pinterestdl')
-const pinsearch = require('./api/pinsearch')
-const shazam = require('./api/shazam')
 
 const app = express()
 
@@ -160,134 +152,18 @@ app.get(
     }
 )
 
-// SHAZAM
-app.get(
-    '/saitama/api/shazam',
-    validateApiKey,
-    (req, res) => {
-        updateStats('shazam')
-        shazam(req, res)
-    }
-)
 
-// PLAYSTORESEARCH
-app.get(
-    '/saitama/api/playstoresearch',
-    validateApiKey,
-    (req, res) => {
-        updateStats('playstoresearch')
-        playstoresearch(req, res)
-    }
-)
 
-//SPOTIFYSEARCH
-app.get(
-    '/saitama/api/spotifysearch',
-    validateApiKey,
-    (req, res) => {
 
-        updateStats('spotifysearch')
-
-        spotifysearch(req, res)
-
-    }
-)
-
-// SPOTIFYDL
-app.get(
-    '/saitama/api/spotifydl',
-    validateApiKey,
-    (req, res) => {
-        updateStats('spotifydl')
-        spotifydl(req, res)
-    }
-)
-
-app.get(
-    '/saitama/api/spotifydl/file/:id.mp3',
-    spotifydl.spotifydlFile
-)
-
-// TIKTOK DOWNLOAD
-app.get(
-    '/saitama/api/tiktokdl',
-    validateApiKey,
-    (req, res) => {
-        updateStats('tiktokdl')
-        tiktokdl(req, res)
-    }
-)
-
-// ARCHIVO TIKTOK - SIN API KEY
-app.get(
-    '/saitama/api/tiktokdl/file/:filename',
-    tiktokdl.serveTikTokFile
-)
-
-// FACEBOOK DOWNLOAD
-app.get(
-    '/saitama/api/facebookdl',
-    validateApiKey,
-    (req, res) => {
-        updateStats('facebookdl')
-        facebookdl(req, res)
-    }
-)
-
-app.get(
-    '/saitama/api/facebookdl/file/:filename',
-    facebookdl.serveFacebookFile
-)
-
-// INSTAGRAMDL
-app.get(
-    '/saitama/api/instagramdl',
-    validateApiKey,
-    (req, res) => {
-        updateStats('instagramdl')
-        instagramdl(req, res)
-    }
-)
-
-app.get(
-    '/saitama/api/instagramdl/file/:id.:ext',
-    instagramdl.instagramdlFile
-)
 
 // TIKTOK SEARCH
-app.get(
-    '/saitama/api/tiktoksearch',
-    validateApiKey,
+    'alidateApiKey,
     (req, res) => {
-        updateStats('tiktoksearch')
-        tiktoksearch(req, res)
-    }
-)
+',
+       'tiktoksearch(req, res)
+',
 
-// PINTERESTDL
-app.get(
-    '/saitama/api/pinterestdl',
-    validateApiKey,
-    (req, res) => {
-        updateStats('pinterestdl')
-        pinterestdl(req, res)
-    }
-)
 
-app.get(
-    '/saitama/api/pinterestdl/file/:id.:ext',
-    pinterestdl.pinterestdlFile
-)
-
-// PINSEARCH
-app.get(
-    '/saitama/api/pinsearch',
-    validateApiKey,
-    (req, res) => {
-        updateStats('pinsearch')
-        pinsearch(req, res)
-    }
-)
 
 // 404
 app.use((req, res) => {
@@ -324,4 +200,5 @@ if (require.main === module) {
 }
 
 module.exports = app
-
+	
+	

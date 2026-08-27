@@ -1,0 +1,124 @@
+const axios = require('axios')
+
+const DEEZER_API = 'https://api.deezer.com/search'
+
+const spotifysearch = async (req, res) => {
+    const q = String(req.query.q || '').trim()
+
+    if (!q) {
+        return res.status(400).json({
+            status: false,
+            code: 400,
+            creator: 'SaiDev145',
+            error: 'Bad Request',
+            message: 'El parámetro q es obligatorio',
+            example: '/saitama/api/spotifysearch?q=Bad%20Bunny'
+        })
+    }
+
+    try {
+        const response = await axios.get(DEEZER_API, {
+            params: {
+                q,
+                limit: 7
+            },
+            timeout: 15000
+        })
+
+        const data = response.data
+
+        if (!data || !Array.isArray(data.data)) {
+            return res.status(502).json({
+                status: false,
+                code: 502,
+                creator: 'SaiDev145',
+                error: 'Search API Error',
+                message: 'La fuente de búsqueda no devolvió resultados válidos'
+            })
+        }
+
+        const results = data.data.slice(0, 7).map((track, index) => {
+
+            const durationSeconds =
+                Number(track.duration) || 0
+
+            const minutes =
+                Math.floor(durationSeconds / 60)
+
+            const seconds =
+                durationSeconds % 60
+
+            const duration =
+                `${minutes}:${String(seconds).padStart(2, '0')}`
+
+            return {
+                position: index + 1,
+
+                id: track.id || null,
+
+                title:
+                    track.title || null,
+
+                artist:
+                    track.artist?.name || null,
+
+                album:
+                    track.album?.title || null,
+
+                duration,
+
+                duration_seconds:
+                    durationSeconds,
+
+                thumbnail:
+                    track.album?.cover_xl ||
+                    track.album?.cover_big ||
+                    track.album?.cover_medium ||
+                    null,
+
+                url:
+                    track.link || null,
+
+                preview:
+                    track.preview || null,
+
+                explicit:
+                    Boolean(track.explicit_lyrics),
+
+                isrc:
+                    track.isrc || null
+            }
+        })
+
+        return res.json({
+            status: true,
+            code: 200,
+            creator: 'SaiDev145',
+            type: 'music',
+            source: 'Deezer',
+            query: q,
+            total: results.length,
+            results
+        })
+
+    } catch (error) {
+
+        const status =
+            error.response?.status || 500
+
+        const detail =
+            error.response?.data ||
+            error.message
+
+        return res.status(500).json({
+            status: false,
+            code: status,
+            creator: 'SaiDev145',
+            error: 'Spotify Search Error',
+            message: 'No se pudieron obtener los resultados de música',
+            detail
+        })
+    }
+}
+
+module.exports = spotifysearch
