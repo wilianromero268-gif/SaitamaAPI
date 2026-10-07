@@ -12,8 +12,21 @@ async function admin(req,env){return req.headers.get('x-dashboard-secret')===env
 async function dashboardApi(req,env,u){
  if(!(await admin(req,env)))return json({status:false,error:'Dashboard secret requerido'},401);
  if(u.pathname==='/dashboard/api/stats'){
-  const k=await env.DB.prepare('SELECT id,key_prefix,created_at FROM api_keys WHERE active=1 ORDER BY id DESC LIMIT 1').first();
-  const us=k?await usage(env,k.id):{requests:0,errors:0};
+  let k = null;
+  try {
+   k = await env.DB.prepare('SELECT id,key_prefix,created_at FROM api_keys WHERE active=1 ORDER BY id DESC LIMIT 1').first();
+  } catch (e) {
+   return json({status:false,error:'Error consultando api_keys',message:e.message},500);
+  }
+
+  let us = {requests:0,errors:0};
+  if (k) {
+   try {
+    us = await usage(env,k.id);
+   } catch (e) {
+    return json({status:false,error:'Error consultando usage_daily',message:e.message},500);
+   }
+  }
   return json({status:true,creator:CREATOR,year:YEAR,limit:LIMIT,keyActive:!!k,keyPrefix:k?.key_prefix||null,createdAt:k?.created_at||null,requests:us.requests,errors:us.errors,remaining:Math.max(0,LIMIT-us.requests)});
  }
  if(u.pathname==='/dashboard/api/key/generate'&&req.method==='POST'){
