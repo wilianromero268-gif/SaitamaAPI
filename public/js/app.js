@@ -8,19 +8,25 @@ async function call(path, options = {}) {
     'x-dashboard-secret': S
   };
 
+  const response = await fetch(path, options);
+  const text = await response.text();
+
+  let data;
+
   try {
-    const response = await fetch(path, options);
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || `Error HTTP ${response.status}`);
-    }
-
-    return data;
-  } catch (error) {
-    console.error(path, error);
-    throw error;
+    data = JSON.parse(text);
+  } catch {
+    console.error('Respuesta no JSON:', text);
+    throw new Error(
+      `El servidor devolvió HTML/texto en ${path} en lugar de JSON.`
+    );
   }
+
+  if (!response.ok) {
+    throw new Error(data.error || `Error HTTP ${response.status}`);
+  }
+
+  return data;
 }
 
 async function load() {
@@ -63,9 +69,10 @@ async function load() {
     `;
 
     const docsResponse = await fetch('/api/docs');
-    const docs = await docsResponse.json();
+    const docsText = await docsResponse.text();
+    const docs = JSON.parse(docsText);
 
-    if (docs.endpoints && docs.endpoints.length) {
+    if (docs.endpoints?.length) {
       $('eps').innerHTML = docs.endpoints.map(e => `
         <div class="card">
           <b>${e.method} ${e.path}</b>
@@ -77,14 +84,14 @@ async function load() {
     }
 
   } catch (error) {
+    console.error(error);
+
     $('panel').innerHTML = `
       <div class="card">
         <b>❌ No se pudo cargar el dashboard</b>
         <p>${error.message}</p>
       </div>
     `;
-
-    alert(error.message);
   }
 }
 
@@ -99,18 +106,18 @@ async function gen() {
       method: 'POST'
     });
 
-    if (d.apiKey) {
-      $('key').textContent = d.apiKey;
-
-      alert(
-        '✅ API Key generada correctamente.\\n\\n' +
-        'Guárdala ahora. Por seguridad no volverá a mostrarse completa.'
-      );
-
-      await load();
-    } else {
-      alert(d.error || 'No se pudo generar la API Key');
+    if (!d.apiKey) {
+      throw new Error(d.error || 'No se pudo generar la API Key');
     }
+
+    $('key').textContent = d.apiKey;
+
+    alert(
+      '✅ API Key generada correctamente.\\n\\n' +
+      'Guárdala ahora. No se volverá a mostrar completa.'
+    );
+
+    await load();
 
   } catch (error) {
     alert('❌ ' + error.message);
