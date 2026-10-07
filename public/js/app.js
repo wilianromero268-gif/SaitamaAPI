@@ -8,7 +8,7 @@ async function call(path, options = {}) {
     'x-dashboard-secret': S
   };
 
-  const response = await fetch(path, options);
+  const response = await fetch('https://saitamaapi.wilianromero268.workers.dev' + path, options);
   const text = await response.text();
 
   let data;
