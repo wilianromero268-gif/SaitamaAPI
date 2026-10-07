@@ -1,0 +1,12 @@
+name = "saitamaapi"
+main = "src/worker.js"
+compatibility_date = "2026-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "1234"
+database_id = "df174f31-09e6-4784-9fb9-63abbda1c110"
