@@ -10,6 +10,7 @@ async function log(env,keyId,path,method,status,error){await env.DB.prepare('INS
 async function bump(env,id,isError){await env.DB.prepare(`INSERT INTO usage_daily(key_id,day,requests,errors) VALUES(?,?,1,?) ON CONFLICT(key_id,day) DO UPDATE SET requests=requests+1, errors=errors+excluded.errors`).bind(id,day(),isError?1:0).run();}
 async function admin(req,env){return req.headers.get('x-dashboard-secret')===env.DASHBOARD_SECRET||new URL(req.url).searchParams.get('secret')===env.DASHBOARD_SECRET;}
 async function dashboardApi(req,env,u){
+ try {
  if(!(await admin(req,env)))return json({status:false,error:'Dashboard secret requerido'},401);
  if(u.pathname==='/dashboard/api/stats'){
   let k = null;
@@ -41,6 +42,9 @@ async function dashboardApi(req,env,u){
   const r=await env.DB.prepare('SELECT path,method,status,error,created_at FROM request_logs ORDER BY id DESC LIMIT 100').all();return json({status:true,logs:r.results||[]});
  }
  return json({status:false,error:'Ruta dashboard no encontrada'},404);
+ } catch(e) {
+  return json({status:false,error:'Dashboard error',message:e?.message||String(e)},500);
+ }
 }
 async function handleApi(req,env,u){
  const ep=findEndpoint(u.pathname,req.method);if(!ep)return json({status:false,error:'Endpoint no encontrado'},404);
