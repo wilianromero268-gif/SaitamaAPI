@@ -33,12 +33,10 @@ async function dashboardApi(req,env,u){
   await env.DB.prepare('UPDATE api_keys SET active=0,deleted_at=? WHERE active=1').bind(new Date().toISOString()).run();
   const raw='sai_'+[...crypto.getRandomValues(new Uint8Array(24))].map(x=>x.toString(16).padStart(2,'0')).join('');
   const h=await hash(raw), now=new Date().toISOString();
-  await env.DB.prepare('INSERT INTO api_keys(key_hash,key_prefix,active,created_at) VALUES(?,?,1,?,?)').bind(h,raw.slice(0,12)+'...',1,now).run().catch(async()=>{await env.DB.prepare('INSERT INTO api_keys(key_hash,key_prefix,active,created_at) VALUES(?,?,?,?)').bind(h,raw.slice(0,12)+'...',1,now).run()});
+  await env.DB.prepare('INSERT INTO api_keys(key_hash,key_prefix,active,created_at) VALUES(?,?,?,?)').bind(h,raw.slice(0,12)+'...',1,now).run().catch(async()=>{await env.DB.prepare('INSERT INTO api_keys(key_hash,key_prefix,active,created_at) VALUES(?,?,?,?)').bind(h,raw.slice(0,12)+'...',1,now).run()});
   return json({status:true,message:'Guarda esta clave. Se muestra completa una sola vez.',apiKey:raw,limitPerDay:LIMIT});
  }
- if(u.pathname==='/dashboard/api/key/delete'&&req.method==='DELETE'){
-  await env.DB.prepare('UPDATE api_keys SET active=0,deleted_at=? WHERE active=1').bind(new Date().toISOString()).run();return json({status:true,message:'Clave eliminada'});
- }
+ if(u.pathname==='/dashboard/api/key/delete'&&req.method==='DELETE'){ await env.DB.prepare('UPDATE api_keys SET active=0,deleted_at=? WHERE active=1').bind(new Date().toISOString()).run(); return json({status:true,message:'Clave eliminada'}); }
  if(u.pathname==='/dashboard/api/logs'){
   const r=await env.DB.prepare('SELECT path,method,status,error,created_at FROM request_logs ORDER BY id DESC LIMIT 100').all();return json({status:true,logs:r.results||[]});
  }
