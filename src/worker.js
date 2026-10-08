@@ -5,7 +5,7 @@ const day=()=>new Date().toISOString().slice(0,10);
 async function hash(v){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}
 function getKey(req){const u=new URL(req.url);const q=u.searchParams.get('apikey')||u.searchParams.get('api_key');if(q)return q;const h=req.headers.get('x-api-key');if(h)return h;const a=req.headers.get('authorization')||'';return a.toLowerCase().startsWith('bearer ')?a.slice(7).trim():null;}
 async function keyRow(env,key){if(!key)return null;return env.DB.prepare('SELECT * FROM api_keys WHERE key_hash=? AND active=1').bind(await hash(key)).first();}
-async function usage(env,id){return env.DB.prepare('SELECT requests,errors FROM usage_daily WHERE key_id=? AND day=?').bind(id,day()).first()||{requests:0,errors:0};}
+async function usage(env,id){return (await env.DB.prepare('SELECT requests,errors FROM usage_daily WHERE key_id=? AND day=?').bind(id,day()).first())||{requests:0,errors:0};}
 async function log(env,keyId,path,method,status,error){await env.DB.prepare('INSERT INTO request_logs(key_id,path,method,status,error,created_at) VALUES(?,?,?,?,?,?)').bind(keyId,path,method,status,error?1:0,new Date().toISOString()).run();}
 async function bump(env,id,isError){await env.DB.prepare(`INSERT INTO usage_daily(key_id,day,requests,errors) VALUES(?,?,1,?) ON CONFLICT(key_id,day) DO UPDATE SET requests=requests+1, errors=errors+excluded.errors`).bind(id,day(),isError?1:0).run();}
 async function admin(req,env){return req.headers.get('x-dashboard-secret')===env.DASHBOARD_SECRET||new URL(req.url).searchParams.get('secret')===env.DASHBOARD_SECRET;}
