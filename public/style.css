@@ -1,2 +1,27 @@
 *{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#0b0d12;color:#f5f5f5}main{max-width:900px;margin:auto;padding:20px}.card{background:#141821;border:1px solid #252c39;border-radius:18px;padding:20px;margin:14px 0;box-shadow:0 10px 30px #0005}.hero{background:linear-gradient(135deg,#171b25,#0d1118)}h1{font-size:32px;margin:0 0 5px}h2{margin-top:0}input{width:100%;padding:13px;border-radius:10px;border:1px solid #303847;background:#0c1017;color:white;margin:8px 0 12px}button{border:0;border-radius:10px;padding:11px 15px;margin:4px;background:#f5f5f5;color:#111;font-weight:700}.danger{background:#cfcfcf}pre,code{background:#0b0e14;border-radius:9px;padding:10px;overflow:auto}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{padding:18px;background:#10141c;border-radius:14px}.bar{height:12px;background:#292f3b;border-radius:20px;overflow:hidden}.fill{height:100%;background:#f5f5f5}@media(max-width:650px){.grid{grid-template-columns:1fr}}
 a{color:#fff}
+
+.key-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#key {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 12px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  user-select: all;
+}
+
+.copy {
+  cursor: pointer;
+}
+

@@ -95,6 +95,29 @@ async function load() {
   }
 }
 
+
+async function copyKey() {
+  const key = $('key').textContent.trim();
+
+  if (!key || key === '—') {
+    alert('❌ No hay una API Key para copiar');
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(key);
+    alert('✅ API Key copiada al portapapeles');
+  } catch {
+    const area = document.createElement('textarea');
+    area.value = key;
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand('copy');
+    area.remove();
+    alert('✅ API Key copiada al portapapeles');
+  }
+}
+
 async function gen() {
   if (!S) {
     alert('Primero carga el dashboard');
