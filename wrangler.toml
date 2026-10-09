@@ -1,0 +1,18 @@
+name = "saitamaapi-pro"
+main = "src/worker.js"
+compatibility_date = "2026-10-01"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/auth/*", "/dashboard"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "1234"
+database_id = "df174f31-09e6-4784-9fb9-63abbda1c110"
+
+[vars]
+APP_NAME = "SaitamaAPI PRO"
+DAILY_LIMIT = "450"
+APP_ORIGIN = "https://saitamaapi.wilianromero268.workers.dev"

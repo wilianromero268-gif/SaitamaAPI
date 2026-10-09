@@ -1,0 +1,8 @@
+{
+  "name": "saitamaapi-pro",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {"dev": "wrangler dev", "deploy": "wrangler deploy", "db:local": "wrangler d1 execute saitamaapi-db --local --file=migrations/0001_init.sql", "db:remote": "wrangler d1 execute saitamaapi-db --remote --file=migrations/0001_init.sql"},
+  "devDependencies": {"wrangler": "^4.30.0"}
+}
