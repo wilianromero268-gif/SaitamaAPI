@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#090b12"><meta name="description" content="SaitamaAPI PRO: administra tus API keys y endpoints.">
+  <title>SaitamaAPI PRO</title><link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="/"><span class="brand-mark">SAI</span><span><b>SaitamaAPI</b><small>PRO CONSOLE</small></span></a>
+      <nav>
+        <a class="nav-link active" href="#dashboard" data-view="dashboard">▦ <span>Dashboard</span></a>
+        <a class="nav-link" href="#account" data-view="account">⌘ <span>Mi API Key</span></a>
+        <a class="nav-link" href="#docs" data-view="docs">▤ <span>Documentación</span></a>
+        <a class="nav-link admin-only hidden" href="#admin" data-view="admin">⚙ <span>Administración</span></a>
+      </nav>
+      <div class="sidebar-bottom"><span class="status-dot"></span> Todos los sistemas listos <small>SAI • 2026</small></div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
+        <div><div class="eyebrow">API MANAGEMENT PLATFORM</div><h1 id="pageTitle">Dashboard</h1></div>
+        <div class="top-actions"><span class="pill">● PRO</span><button class="avatar" id="avatar">S</button></div>
+      </header>
+      <section id="notice" class="notice hidden"></section>
+      <section id="authView" class="auth-layout">
+        <div class="hero">
+          <div class="hero-tag">✦ DEVELOPER PLATFORM</div><h2>Tu próxima API,<br><span>más simple.</span></h2>
+          <p>Administra tus claves, consulta estadísticas y publica endpoints desde una sola consola.</p>
+          <div class="hero-stats"><div><b>450</b><small>Solicitudes diarias</small></div><div><b>SAI</b><small>Creator</small></div><div><b>2026</b><small>Platform</small></div></div>
+        </div>
+        <div class="auth-card">
+          <div class="tabs"><button class="tab active" data-auth="login">Iniciar sesión</button><button class="tab" data-auth="register">Crear cuenta</button></div>
+          <form id="authForm">
+            <label id="nameWrap" class="hidden">Nombre<input name="name" autocomplete="name" placeholder="Tu nombre"></label>
+            <label>Correo electrónico<input name="email" type="email" autocomplete="email" required placeholder="tu@correo.com"></label>
+            <label>Contraseña<input name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="Mínimo 8 caracteres"></label>
+            <button class="primary full" id="authSubmit">Entrar al dashboard <span>→</span></button>
+          </form>
+          <div class="or"><span>o continúa con</span></div>
+          <a class="google-btn" id="googleBtn" href="/auth/google"><span class="google-g">G</span> Continuar con Google</a>
+          <p class="muted tiny">El acceso con Google se activa al configurar sus credenciales en Cloudflare. También puedes usar correo y contraseña.</p>
+        </div>
+      </section>
+      <section id="appView" class="hidden">
+        <div class="welcome-row"><div><p class="eyebrow">TU ESPACIO DE TRABAJO</p><h2>Hola, <span id="userName">Developer</span> 👋</h2><p class="muted">Aquí tienes el resumen de tu API.</p></div><span id="roleBadge" class="badge">USER</span></div>
+        <div id="statsGrid" class="stats-grid">
+          <article class="stat-card"><span>Solicitudes hoy</span><b id="usageNum">0</b><small id="usageSub">de 450 disponibles</small><div class="progress"><i id="usageBar"></i></div></article>
+          <article class="stat-card"><span>Errores hoy</span><b id="errorsNum">0</b><small>Respuestas fallidas</small></article>
+          <article class="stat-card"><span>API Key</span><b id="keyState">Sin clave</b><small>Clave personal</small></article>
+          <article class="stat-card admin-only hidden"><span>Usuarios totales</span><b id="totalUsers">—</b><small>Registrados en la plataforma</small></article>
+        </div>
+        <div class="content-grid">
+          <article class="panel key-panel"><div class="panel-head"><div><p class="eyebrow">SEGURIDAD</p><h3>Tu API Key</h3></div><span class="key-icon">⌘</span></div><p class="muted">Genera una clave personal para autenticar tus peticiones.</p><div class="key-display"><code id="keyText">sai_••••••••••••••••</code><button class="icon-btn" id="copyKey" title="Copiar clave">▢</button></div><div class="button-row"><button class="primary" id="generateKey">＋ Generar nueva clave</button><button class="secondary" id="revokeKey">Revocar</button></div><p class="tiny muted">La clave completa solo se muestra al generarla. Guárdala en un lugar seguro.</p></article>
+          <article class="panel"><div class="panel-head"><div><p class="eyebrow">QUICK START</p><h3>Primera petición</h3></div><span class="key-icon">⌁</span></div><p class="muted">Incluye tu API Key en el encabezado de cada solicitud.</p><pre><code>curl -H "x-api-key: sai_TU_CLAVE" \\
+  "https://saitamaapi.wilianromero268.workers.dev/api/ping"</code></pre><a class="text-link" href="#docs" data-view="docs">Ver documentación completa →</a></article>
+        </div>
+        <article class="panel endpoints-panel"><div class="panel-head"><div><p class="eyebrow">EXPLORA</p><h3>Endpoints disponibles</h3></div><a class="text-link" href="#docs" data-view="docs">Ver todos →</a></div><div id="endpointCards" class="endpoint-grid"></div></article>
+      </section>
+      <section id="docsView" class="hidden">
+        <div class="section-intro"><p class="eyebrow">DEVELOPER RESOURCES</p><h2>Documentación de la API</h2><p class="muted">Autentica las peticiones con el encabezado <code>x-api-key</code>.</p></div>
+        <article class="panel"><h3>Base URL</h3><div class="key-display"><code>https://saitamaapi.wilianromero268.workers.dev</code><button class="copy-base icon-btn">▢</button></div><h3>Autenticación</h3><pre><code>x-api-key: sai_TU_CLAVE</code></pre><div id="docsEndpoints" class="docs-list"></div></article>
+      </section>
+      <section id="adminView" class="hidden">
+        <div class="section-intro"><p class="eyebrow">CONTROL CENTER</p><h2>Administración</h2><p class="muted">Gestiona endpoints publicados y consulta el uso de la plataforma.</p></div>
+        <div class="stats-grid"><article class="stat-card"><span>Usuarios</span><b id="adminUsers">0</b></article><article class="stat-card"><span>Claves activas</span><b id="adminKeys">0</b></article><article class="stat-card"><span>Solicitudes hoy</span><b id="adminRequests">0</b></article><article class="stat-card"><span>Errores hoy</span><b id="adminErrors">0</b></article></div>
+        <article class="panel"><div class="panel-head"><div><p class="eyebrow">ENDPOINT BUILDER</p><h3>Agregar endpoint</h3></div></div>
+          <form id="endpointForm" class="endpoint-form">
+            <label>Nombre<input name="name" required placeholder="YouTube Search"></label>
+            <label>Ruta<input name="path" required placeholder="/api/ytsearch"></label>
+            <label>URL externa HTTPS<input name="upstream_url" type="url" required placeholder="https://api.ejemplo.com/search"></label>
+            <label>Método<select name="method"><option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option></select></label>
+            <label>Parámetro principal<input name="param_name" placeholder="q" value="q"></label>
+            <label>Descripción<input name="description" placeholder="Busca videos por nombre"></label>
+            <button class="primary">＋ Publicar endpoint</button>
+          </form>
+        </article>
+        <article class="panel"><div class="panel-head"><h3>Endpoints administrados</h3></div><div id="adminEndpointList" class="admin-endpoint-list"></div></article>
+      </section>
+      <footer><span>© 2026 SaitamaAPI PRO</span><span>Desarrollado por <b>SAI</b></span><button id="logoutBtn" class="text-link hidden">Cerrar sesión</button></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="/js/app.js"></script>
+</body></html>
