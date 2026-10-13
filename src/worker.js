@@ -152,7 +152,7 @@ async function authRoutes(req, env, url) {
       client_id: env.GOOGLE_CLIENT_ID, redirect_uri: redirect, response_type: "code",
       scope: "openid email profile", state, prompt: "select_account"
     });
-    return Response.redirect(target.toString(), 302, { "set-cookie": cookie("sai_oauth_state", state, 600) });
+    return redirectWithCookies(target.toString(), [cookie("sai_oauth_state", state, 600)]);
   }
   if (path === "/auth/google/callback") {
     if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) return fail("Configura GOOGLE_CLIENT_ID y GOOGLE_CLIENT_SECRET en Cloudflare.", 503);
