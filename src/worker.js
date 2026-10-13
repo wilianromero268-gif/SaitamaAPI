@@ -166,7 +166,24 @@ async function authRoutes(req, env, url) {
       body: new URLSearchParams({ code, client_id: env.GOOGLE_CLIENT_ID, client_secret: env.GOOGLE_CLIENT_SECRET, redirect_uri: redirectUri, grant_type: "authorization_code" })
     });
     const tokenData = await tokenRes.json();
-    if (!tokenRes.ok || !tokenData.access_token) return fail("Google no pudo validar el inicio de sesión. Revisa las URL de OAuth.", 401);
+    if (!tokenRes.ok || !tokenData.access_token) {
+      const googleError = String(tokenData.error || "unknown");
+      const descriptions = {
+        invalid_client: "El Client ID o Client Secret no es válido.",
+        invalid_grant: "El código expiró, ya se utilizó o la URL de retorno no coincide.",
+        redirect_uri_mismatch: "La URL de retorno no coincide con la configurada en Google Cloud."
+      };
+      console.error("GOOGLE_OAUTH_TOKEN_ERROR:", {
+        status: tokenRes.status,
+        error: googleError,
+        description: descriptions[googleError] || "Google rechazó el intercambio del código."
+      });
+      return fail(
+        "Error OAuth de Google: " + googleError + ". " +
+        (descriptions[googleError] || "Revisa las credenciales y la URL de retorno."),
+        401
+      );
+    }
     const profileRes = await fetch("https://openidconnect.googleapis.com/v1/userinfo", { headers: { authorization: `Bearer ${tokenData.access_token}` } });
     const profile = await profileRes.json();
     if (!profile.email || profile.email_verified !== true) return fail("Google no confirmó un correo verificado.", 401);
