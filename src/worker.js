@@ -302,7 +302,8 @@ export default {
       if (env.ASSETS) return env.ASSETS.fetch(req);
       return json({ status: false, error: "No encontrado", creator: CREATOR, year: YEAR }, 404);
     } catch (err) {
-      return fail("Error interno del servidor.", 500);
+      console.error("SAITAMAAPI_ERROR:", err?.stack || err?.message || String(err));
+      return fail("Error interno del servidor. Revisa los logs de Cloudflare con el identificador SAITAMAAPI_ERROR.", 500);
     }
   }
 };
