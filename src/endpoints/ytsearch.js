@@ -2,7 +2,7 @@ export const meta = {
   name: 'YouTube Search',
   method: 'GET',
   path: '/api/ytsearch',
-  description: 'Busca videos en YouTube usando yt-dlp.',
+  description: 'Busca videos en YouTube.',
   creator: 'ֆǟɨ'
 };
 

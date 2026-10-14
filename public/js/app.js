@@ -64,11 +64,35 @@ async function loadEndpoints() {
   try {
     const data = await api("/dashboard/api/endpoints");
     state.endpoints = data.endpoints || [];
-    const cards = state.endpoints.map(e => `<article class="endpoint-card"><span class="method">${escapeHtml(e.method || "GET")}</span><h4>${escapeHtml(e.name)}</h4><code>${escapeHtml(e.path)}</code><p>${escapeHtml(e.description || "Endpoint de SaitamaAPI")}</p></article>`).join("");
+
+    const cards = state.endpoints.map(e => `
+      <article class="endpoint-card">
+        <span class="method">${escapeHtml(e.method || "GET")}</span>
+        <h4>${escapeHtml(e.name)}</h4>
+        <code>${escapeHtml(e.path)}</code>
+        <p>${escapeHtml(e.description || "Endpoint de SaitamaAPI")}</p>
+        ${e.path === "/api/ytsearch" && e.method === "GET" ? `
+          <label for="ytSearchQuery">Buscar videos en YouTube</label>
+          <input id="ytSearchQuery" type="text" placeholder="Ejemplo: Shakira">
+          <button class="primary" type="button" data-test-ytsearch>Probar búsqueda</button>
+          <button class="secondary" type="button" data-copy-node>Copiar ejemplo Node.js</button>
+          <pre class="yt-result"><code id="ytSearchResult">Escribe una búsqueda y pulsa Probar búsqueda.</code></pre>
+        ` : ""}
+      </article>
+    `).join("");
+
     $("#endpointCards").innerHTML = cards || '<p class="muted">Todavía no hay endpoints.</p>';
-    $("#docsEndpoints").innerHTML = state.endpoints.map(e => `<div class="doc-item"><h4>${escapeHtml(e.name)} <span class="method">${escapeHtml(e.method)}</span></h4><p class="muted">${escapeHtml(e.description || "")}</p><p><code>${escapeHtml(e.path)}</code></p><pre><code>curl -H "x-api-key: sai_TU_CLAVE" "${location.origin}${escapeHtml(e.path)}?${encodeURIComponent(e.param_name || "q")}=ejemplo"</code></pre></div>`).join("");
-    $("#adminEndpointList").innerHTML = state.endpoints.map(e => `<div class="admin-endpoint"><div><b>${escapeHtml(e.name)}</b><br><code>${escapeHtml(e.path)}</code><p class="tiny muted">${escapeHtml(e.upstream_url || "Endpoint integrado")}</p></div>${e.id.startsWith("builtin-") ? '<span class="badge">INTEGRADO</span>' : `<button class="danger" data-delete-endpoint="${escapeHtml(e.id)}">Eliminar</button>`}</div>`).join("");
-  } catch(e) { showNotice(e.message); }
+
+    $("#docsEndpoints").innerHTML = state.endpoints.map(e =>
+      `<div class="doc-item"><h4>${escapeHtml(e.name)} <span class="method">${escapeHtml(e.method)}</span></h4><p class="muted">${escapeHtml(e.description || "")}</p><p><code>${escapeHtml(e.path)}</code></p><pre><code>curl -H "x-api-key: sai_TU_CLAVE" "${location.origin}${escapeHtml(e.path)}?${encodeURIComponent(e.param_name || "q")}=ejemplo"</code></pre></div>`
+    ).join("");
+
+    $("#adminEndpointList").innerHTML = state.endpoints.map(e =>
+      `<div class="admin-endpoint"><div><b>${escapeHtml(e.name)}</b><br><code>${escapeHtml(e.path)}</code><p class="tiny muted">${escapeHtml(e.upstream_url || "Endpoint integrado")}</p></div>${String(e.id).startsWith("builtin-") ? '<span class="badge">INTEGRADO</span>' : `<button class="danger" data-delete-endpoint="${escapeHtml(e.id)}">Eliminar</button>`}</div>`
+    ).join("");
+  } catch(e) {
+    showNotice(e.message);
+  }
 }
 async function loadAdmin() {
   try {
@@ -88,7 +112,51 @@ $("#authForm").addEventListener("submit", async e => {
     const path = state.authMode === "register" ? "/auth/register" : "/auth/login";
     await api(path, { method:"POST", body:JSON.stringify(body) });
     toast(state.authMode === "register" ? "Cuenta creada correctamente" : "Bienvenido a SaitamaAPI PRO");
-    await loadMe();
+    await
+document.addEventListener("click", async e => {
+  const testButton = e.target.closest("[data-test-ytsearch]");
+  const copyButton = e.target.closest("[data-copy-node]");
+
+  if (testButton) {
+    const query = document.querySelector("#ytSearchQuery")?.value.trim();
+    const output = document.querySelector("#ytSearchResult");
+    if (!query) {
+      toast("Escribe qué video quieres buscar.");
+      return;
+    }
+    testButton.disabled = true;
+    testButton.textContent = "Buscando...";
+    if (output) output.textContent = "Consultando SaitamaAPI...";
+    try {
+      const result = await api("/dashboard/api/test", {
+        method: "POST",
+        body: JSON.stringify({ path: "/api/ytsearch", q: query, limit: 10 })
+      });
+      if (output) output.textContent = JSON.stringify(result, null, 2);
+    } catch (err) {
+      if (output) output.textContent = JSON.stringify({ status: false, error: err.message }, null, 2);
+      toast(err.message);
+    } finally {
+      testButton.disabled = false;
+      testButton.textContent = "Probar búsqueda";
+    }
+  }
+
+  if (copyButton) {
+    const sample = `const response = await fetch("https://saitamaapi.wilianromero268.workers.dev/api/ytsearch?q=Shakira&limit=10", {
+  headers: { "x-api-key": "sai_TU_CLAVE" }
+});
+console.log(await response.json());`;
+    try {
+      await navigator.clipboard.writeText(sample);
+      toast("Ejemplo Node.js copiado.");
+    } catch (_) {
+      toast("No se pudo copiar automáticamente. Revisa los permisos del navegador.");
+    }
+  }
+});
+
+loadMe();
   } catch(err) { toast(err.message); }
 });
 $("#googleBtn").addEventListener("click", async e => {

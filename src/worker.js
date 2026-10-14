@@ -1,3 +1,4 @@
+import { findEndpoint } from "./endpoints/index.js";
 const APP_NAME = "SaitamaAPI PRO";
 const CREATOR = "SAI";
 const YEAR = 2026;
@@ -107,6 +108,24 @@ async function apiRequest(req, env, url) {
   const limit = Number(env.DAILY_LIMIT || 450);
   if (user.role !== "admin" && (current?.request_count || 0) >= limit) {
     return fail(`Límite diario alcanzado (${limit}). Inténtalo mañana.`, 429);
+  }
+
+  const builtin = findEndpoint(path, req.method);
+  if (builtin && path === "/api/ytsearch") {
+    try {
+      const data = await builtin.run(req, env);
+      await countUsage(user, env, false);
+      return ok({
+        endpoint: builtin.meta.name,
+        ...data,
+        status: true,
+        creator: CREATOR,
+        year: YEAR
+      });
+    } catch (e) {
+      await countUsage(user, env, true);
+      return fail(e?.message || "Falló la búsqueda de YouTube.", 502);
+    }
   }
 
   const endpoint = await env.DB.prepare("SELECT * FROM endpoints WHERE path=? AND enabled=1").bind(path).first();
@@ -258,9 +277,86 @@ async function dashboardRoutes(req, env, url) {
     await env.DB.prepare("UPDATE api_keys SET revoked_at=datetime('now') WHERE user_id=? AND revoked_at IS NULL").bind(auth.user.id).run();
     return ok({ message: "API key revocada." });
   }
+  if (path === "/dashboard/api/test" && req.method === "POST") {
+    const auth = await requireUser(req, env);
+    if (auth.response) return auth.response;
+
+    const user = auth.user;
+    const activeKey = await env.DB.prepare(
+      "SELECT id FROM api_keys WHERE user_id=? AND revoked_at IS NULL LIMIT 1"
+    ).bind(user.id).first();
+
+    if (!activeKey) {
+      return fail("Primero genera una API Key desde Mi API Key.", 403);
+    }
+
+    await ensureUsage(user, env);
+    const usage = await env.DB.prepare(
+      "SELECT request_count FROM usage_daily WHERE user_id=? AND usage_date=?"
+    ).bind(user.id, today()).first();
+
+    const limit = Math.max(1, Number(env.DAILY_LIMIT) || 450);
+    if (user.role !== "admin" && Number(usage?.request_count || 0) >= limit) {
+      return fail("Alcanzaste tu límite diario de solicitudes.", 429);
+    }
+
+    const body = await parseBody(req);
+    const endpointPath = String(body.path || "");
+    if (endpointPath !== "/api/ytsearch") {
+      return fail("El probador todavía solo admite /api/ytsearch.", 400);
+    }
+
+    const query = String(body.q || "").trim().slice(0, 200);
+    if (!query) return fail("Escribe qué quieres buscar en YouTube.", 400);
+
+    const builtin = findEndpoint(endpointPath, "GET");
+    if (!builtin) return fail("El endpoint integrado no está disponible.", 404);
+
+    const testUrl = new URL("https://saitamaapi.internal/api/ytsearch");
+    testUrl.searchParams.set("q", query);
+    const requestedLimit = Number(body.limit);
+    testUrl.searchParams.set(
+      "limit",
+      String(Number.isInteger(requestedLimit) && requestedLimit > 0
+        ? Math.min(requestedLimit, 20)
+        : 10)
+    );
+
+    try {
+      const result = await builtin.run(new Request(testUrl.toString()), env);
+      await countUsage(user, env, false);
+      return ok({
+        endpoint: endpointPath,
+        result,
+        usage: user.role === "admin" ? "unlimited" : "counted",
+        creator: CREATOR,
+        year: YEAR
+      });
+    } catch (error) {
+      await countUsage(user, env, true);
+      return fail(error?.message || "Falló la prueba del endpoint.", 502);
+    }
+  }
+
   if (path === "/dashboard/api/endpoints" && req.method === "GET") {
     const rows = await env.DB.prepare("SELECT id,name,path,upstream_url,method,param_name,description,enabled,created_at FROM endpoints ORDER BY created_at DESC").all();
-    return ok({ endpoints: rows.results || [] });
+    const endpoints = rows.results || [];
+    const ytsearch = findEndpoint("/api/ytsearch", "GET");
+
+    if (ytsearch && !endpoints.some(e => e.path === ytsearch.meta.path && e.method === ytsearch.meta.method)) {
+      endpoints.unshift({
+        id: "builtin-ytsearch",
+        name: ytsearch.meta.name,
+        path: ytsearch.meta.path,
+        upstream_url: "Endpoint integrado",
+        method: ytsearch.meta.method,
+        param_name: "q",
+        description: ytsearch.meta.description,
+        enabled: 1
+      });
+    }
+
+    return ok({ endpoints });
   }
   if (path === "/dashboard/api/admin/stats" && req.method === "GET") {
     const auth = await requireAdmin(req, env); if (auth.response) return auth.response;
