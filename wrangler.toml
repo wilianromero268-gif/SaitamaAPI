@@ -10,8 +10,8 @@ run_worker_first = ["/api/*", "/auth/*", "/dashboard/api/*"]
 
 [[d1_databases]]
 binding = "DB"
-database_name = "1234"
-database_id = "df174f31-09e6-4784-9fb9-63abbda1c110"
+database_name = "saitamaapi-pro-db"
+database_id = "61695362-8c8a-411b-9c6c-2395a4000938"
 
 [vars]
 APP_NAME = "SaitamaAPI PRO"
