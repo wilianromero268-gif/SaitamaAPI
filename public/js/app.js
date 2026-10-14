@@ -112,7 +112,12 @@ $("#authForm").addEventListener("submit", async e => {
     const path = state.authMode === "register" ? "/auth/register" : "/auth/login";
     await api(path, { method:"POST", body:JSON.stringify(body) });
     toast(state.authMode === "register" ? "Cuenta creada correctamente" : "Bienvenido a SaitamaAPI PRO");
-    await
+    await loadMe();
+  } catch(err) {
+    toast(err.message);
+  }
+});
+
 document.addEventListener("click", async e => {
   const testButton = e.target.closest("[data-test-ytsearch]");
   const copyButton = e.target.closest("[data-copy-node]");
@@ -120,13 +125,16 @@ document.addEventListener("click", async e => {
   if (testButton) {
     const query = document.querySelector("#ytSearchQuery")?.value.trim();
     const output = document.querySelector("#ytSearchResult");
+
     if (!query) {
       toast("Escribe qué video quieres buscar.");
       return;
     }
+
     testButton.disabled = true;
     testButton.textContent = "Buscando...";
     if (output) output.textContent = "Consultando SaitamaAPI...";
+
     try {
       const result = await api("/dashboard/api/test", {
         method: "POST",
@@ -147,6 +155,7 @@ document.addEventListener("click", async e => {
   headers: { "x-api-key": "sai_TU_CLAVE" }
 });
 console.log(await response.json());`;
+
     try {
       await navigator.clipboard.writeText(sample);
       toast("Ejemplo Node.js copiado.");
@@ -157,8 +166,7 @@ console.log(await response.json());`;
 });
 
 loadMe();
-  } catch(err) { toast(err.message); }
-});
+
 $("#googleBtn").addEventListener("click", async e => {
   try {
     const providers = await api("/api/auth/providers");
