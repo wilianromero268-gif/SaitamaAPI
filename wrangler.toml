@@ -1,4 +1,4 @@
-name = "saitamaapi-max-plus"
+name = "sai"
 main = "src/worker.js"
 compatibility_date = "2026-10-21"
 compatibility_flags = ["nodejs_compat"]
@@ -10,10 +10,10 @@ run_worker_first = ["/api/*", "/auth/*", "/dashboard/*", "/healthz"]
 
 [[d1_databases]]
 binding = "DB"
-database_name = "saitamaapi-max-plus-db"
-database_id = "REEMPLAZA_CON_EL_DATABASE_ID_DE_TU_D1"
+database_name = "12sai"
+database_id = "44332b0f-0fba-4a58-b652-3cd3481b81d0"
 migrations_dir = "migrations"
 
 [vars]
-APP_ORIGIN = "https://TU-WORKER.workers.dev"
-ADMIN_EMAIL = "tu-correo@gmail.com"
+APP_ORIGIN = "https://sai.wilianromero268.workers.dev"
+ADMIN_EMAIL = "TU_CORREO_DE_GOOGLE"
