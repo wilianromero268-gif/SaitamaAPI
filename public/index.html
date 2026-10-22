@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080b14">
+  <title>SaitamaAPI MAX PLUS</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="ambient"></div>
+  <header class="topbar">
+    <a class="brand" href="/"><span class="brand-mark">SAI</span><span><b>SaitamaAPI</b><small>MAX PLUS · 2026</small></span></a>
+    <button id="menuToggle" class="icon-btn" aria-label="Abrir menú">☰</button>
+    <nav id="nav">
+      <a href="#dashboard">Dashboard</a><a href="#endpoints">Endpoints</a><a href="#music">Reproductor</a><a href="#examples">Código</a>
+      <button id="loginBtn" class="primary small">Iniciar con Google</button>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="eyebrow"><span class="dot"></span> API PLATFORM · CLOUD READY</div>
+      <h1>Tu API.<br><span>Tu universo.</span></h1>
+      <p>Gestiona tus claves, prueba endpoints y monitoriza el uso de SaitamaAPI desde un solo dashboard.</p>
+      <div class="hero-actions"><button class="primary" id="heroLogin">Continuar con Google ↗</button><a class="secondary" href="#endpoints">Explorar endpoints</a></div>
+      <div class="hero-foot"><span>● OAuth Google</span><span>● Cloudflare D1</span><span>● API keys</span></div>
+    </section>
+
+    <section id="dashboard" class="section">
+      <div class="section-heading"><div><div class="eyebrow">CONTROL CENTER</div><h2>Dashboard</h2><p>Tu perfil, tu clave y las estadísticas de uso.</p></div><span id="connection" class="pill">Comprobando sesión…</span></div>
+      <div id="notice" class="notice hidden"></div>
+      <div class="stats-grid">
+        <article class="stat-card"><span>Solicitudes globales</span><strong id="totalRequests">—</strong><small>Todos los usuarios · acumulado</small></article>
+        <article class="stat-card"><span>Errores globales</span><strong id="totalErrors">—</strong><small>Respuestas fallidas registradas</small></article>
+        <article class="stat-card"><span>Tus solicitudes hoy</span><strong id="myToday">—</strong><small>UTC · día actual</small></article>
+        <article class="stat-card"><span>Tus errores hoy</span><strong id="myErrors">—</strong><small>Solo tu cuenta</small></article>
+      </div>
+      <div class="dashboard-grid">
+        <article class="panel profile-panel">
+          <div class="panel-title"><div><span class="eyebrow">ACCOUNT</span><h3>Mi perfil</h3></div><span class="avatar" id="avatar">S</span></div>
+          <div id="profileInfo" class="profile-info"><p>Inicia sesión con Google para cargar tu perfil.</p></div>
+          <div class="key-label"><span>Tu API key</span><span class="pill green" id="keyStatus">No conectada</span></div>
+          <div class="key-row"><code id="apiKey">Inicia sesión para crear tu clave</code><button id="copyKey" class="secondary small" disabled>Copiar</button></div>
+          <p class="muted tiny">La clave completa se muestra al crearla. Guárdala en privado y no la publiques en repositorios.</p>
+          <div class="inline-actions"><button id="rotateKey" class="secondary small" disabled>Regenerar clave</button><button id="logoutBtn" class="ghost small hidden">Cerrar sesión</button></div>
+        </article>
+        <article class="panel">
+          <div class="panel-title"><div><span class="eyebrow">QUICK TEST</span><h3>Probar endpoint</h3></div><span class="pill">GET</span></div>
+          <label for="endpointSelect">Endpoint</label><select id="endpointSelect"><option value="/api/ping">Ping (público)</option><option value="/api/random">Número aleatorio</option><option value="/api/uuid">UUID</option><option value="/api/time">Hora UTC</option><option value="/api/text?text=Hola%20Saitama">Texto</option></select>
+          <label for="testKey">API key</label><input id="testKey" type="password" placeholder="sai_…" autocomplete="off">
+          <button id="runTest" class="primary full">Ejecutar solicitud</button>
+          <pre id="testResult" class="result">La respuesta aparecerá aquí…</pre>
+        </article>
+      </div>
+      <section id="adminPanel" class="panel admin-panel hidden">
+        <div class="panel-title"><div><span class="eyebrow">ADMINISTRATION</span><h3>Actividad de usuarios</h3></div><span class="pill purple">ADMIN</span></div>
+        <div class="table-wrap"><table><thead><tr><th>Usuario</th><th>Correo</th><th>Solicitudes hoy</th><th>Errores hoy</th><th>Rol</th></tr></thead><tbody id="usersTable"><tr><td colspan="5">Cargando…</td></tr></tbody></table></div>
+        <h3 class="subheading">Endpoints más usados</h3><div id="endpointStats" class="endpoint-stats"></div>
+      </section>
+    </section>
+
+    <section id="endpoints" class="section">
+      <div class="section-heading"><div><div class="eyebrow">API CATALOG</div><h2>Endpoints</h2><p>Las rutas privadas requieren una API key válida.</p></div><span class="pill">GET / JSON</span></div>
+      <div class="endpoint-grid">
+        <article class="endpoint-card"><span class="endpoint-icon">⌁</span><span class="category">SISTEMA</span><h3>Ping</h3><p>Comprueba el estado del servicio.</p><code>GET /api/ping</code><span class="pill green">Público</span></article>
+        <article class="endpoint-card"><span class="endpoint-icon">✳</span><span class="category">UTILIDADES</span><h3>Random</h3><p>Genera un número aleatorio.</p><code>GET /api/random?min=1&max=100</code><span class="pill">API key</span></article>
+        <article class="endpoint-card"><span class="endpoint-icon">◇</span><span class="category">UTILIDADES</span><h3>UUID</h3><p>Genera un identificador único.</p><code>GET /api/uuid</code><span class="pill">API key</span></article>
+        <article class="endpoint-card"><span class="endpoint-icon">◷</span><span class="category">UTILIDADES</span><h3>Hora UTC</h3><p>Fecha ISO y timestamp actual.</p><code>GET /api/time</code><span class="pill">API key</span></article>
+        <article class="endpoint-card"><span class="endpoint-icon">⌕</span><span class="category">BUSCADORES</span><h3>YouTube Search</h3><p>Conecta tu proveedor mediante YTSEARCH_URL.</p><code>GET /api/ytsearch?q=Shakira</code><span class="pill amber">Configurar proveedor</span></article>
+        <article class="endpoint-card"><span class="endpoint-icon">⇩</span><span class="category">DESCARGAS</span><h3>Media Download</h3><p>Ruta preparada para integrar un proveedor autorizado.</p><code>GET /api/download?url=…</code><span class="pill amber">En preparación</span></article>
+      </div>
+    </section>
+
+    <section id="music" class="section">
+      <div class="section-heading"><div><div class="eyebrow">LISTENING ROOM</div><h2>Reproductor de música</h2><p>Reproduce un archivo de audio propio o una URL directa que tengas permiso para usar.</p></div></div>
+      <div class="panel music-panel"><div class="record">♫</div><div class="music-controls"><label for="audioUrl">URL directa del audio (MP3, OGG, WAV)</label><div class="url-row"><input id="audioUrl" type="url" placeholder="https://ejemplo.com/audio.mp3"><button id="loadAudio" class="primary">Cargar</button></div><audio id="audioPlayer" controls preload="none"></audio><p class="muted tiny">El reproductor no descarga ni extrae audio de servicios protegidos.</p></div></div>
+    </section>
+
+    <section id="examples" class="section">
+      <div class="section-heading"><div><div class="eyebrow">DEVELOPER TOOLS</div><h2>Ejemplos de código</h2><p>Incluye tu clave como cabecera; no la escribas en código público.</p></div></div>
+      <div class="code-grid"><article class="panel"><div class="panel-title"><h3>Node.js</h3><button class="copy-snippet secondary small" data-target="nodeExample">Copiar</button></div><pre id="nodeExample">const response = await fetch(
+  "https://TU-WORKER.workers.dev/api/random?min=1&max=100",
+  { headers: { "x-api-key": process.env.SAITAMA_API_KEY } }
+);
+const data = await response.json();
+console.log(data);</pre></article>
+      <article class="panel"><div class="panel-title"><h3>Python</h3><button class="copy-snippet secondary small" data-target="pythonExample">Copiar</button></div><pre id="pythonExample">import os
+import requests
+
+response = requests.get(
+    "https://TU-WORKER.workers.dev/api/random?min=1&max=100",
+    headers={"x-api-key": os.environ["SAITAMA_API_KEY"]},
+    timeout=15
+)
+print(response.json())</pre></article></div>
+    </section>
+  </main>
+  <footer><a class="brand" href="/"><span class="brand-mark">SAI</span><span><b>SaitamaAPI</b><small>MAX PLUS · 2026</small></span></a><span>Desarrollado por SAI · 2026</span><a href="#dashboard">Volver arriba ↑</a></footer>
+  <script src="/app.js"></script>
+</body></html>

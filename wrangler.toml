@@ -1,0 +1,19 @@
+name = "saitamaapi-max-plus"
+main = "src/worker.js"
+compatibility_date = "2026-10-21"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/auth/*", "/dashboard/*", "/healthz"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "saitamaapi-max-plus-db"
+database_id = "REEMPLAZA_CON_EL_DATABASE_ID_DE_TU_D1"
+migrations_dir = "migrations"
+
+[vars]
+APP_ORIGIN = "https://TU-WORKER.workers.dev"
+ADMIN_EMAIL = "tu-correo@gmail.com"
